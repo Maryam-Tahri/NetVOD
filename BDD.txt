@@ -4,7 +4,6 @@ CREATE TABLE Users (
     password VARCHAR(255) NOT NULL,
     role int NOT NULL,
     carte_credit VARCHAR(255),
-    role int(11)
 ) ENGINE=InnoDB;
 
 CREATE TABLE Serie (
@@ -31,17 +30,14 @@ CREATE TABLE Episode (
 ) ENGINE=InnoDB;
 
 CREATE TABLE Liste (
-    id_liste INT PRIMARY KEY AUTO_INCREMENT,
+    id_liste INT AUTO_INCREMENT,
+    id_user INT,
     type_list ENUM('preference', 'en_cours', 'deja_visionne') NOT NULL,
     FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
-    UNIQUE KEY unique_user_type (id_user, type_list)
+    UNIQUE KEY unique_user_type (id_user, type_list),
+    PRIMARY KEY (id_liste,id_user)
 ) ENGINE=InnoDB;
 
-CREATE TABLE User2List (
-    id_liste INT NOT NULL,
-    id_user INT NOT NULL,
-    PRIMARY KEY (id_liste,id_user)
-)
 
 CREATE TABLE list2episode (
     id_liste INT NOT NULL,
