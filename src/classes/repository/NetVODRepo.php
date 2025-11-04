@@ -40,4 +40,15 @@ class NetVODRepo
         return $this->pdo;
     }
 
+    public function SaveFavourite(int $id_user,int $_id_episode) {
+        $stmt = $this->pdo->prepare("SELECT id_liste FROM Liste WHERE id_user = :id_user AND type_liste='preference'");
+        $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+        $stmt->execute();
+        $id_liste = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt =$this->pdo->prepare("INSERT INTO list2episode (id_liste, id_episode) VALUES(:id_lsite, :id_episode) ");
+        $stmt->bindParam(':id_user', $id_liste, PDO::PARAM_INT);
+        $stmt->bindParam(':id_episode', $_id_episode, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
 }
