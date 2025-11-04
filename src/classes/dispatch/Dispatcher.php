@@ -52,7 +52,7 @@ class Dispatcher
             $conn = <<<HTML
             <a href='?action=add-user'>Inscription</a>
             <a href='?action=signin'>Se connecter</a>
-<a href="?action=catalogue">Ajouter une piste</a>
+            <a href="?action=catalogue">Afficher le catalogue</a>
 HTML;
         }else{
             $conn = <<<HTML
