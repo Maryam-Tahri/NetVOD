@@ -48,10 +48,8 @@ class NetVODRepo
 
     public function getAllSeries(): array
     {
-        $sql = "SELECT s.titre_serie, s.descriptif,s.annee,s.genre ,s.public, s.chemin_img, AVG(c.note) as note_moyenne 
+        $sql = "SELECT s.titre_serie, s.descriptif,s.annee,s.genre ,s.public_vise, s.img
                 FROM Serie s
-                LEFT JOIN Commentaire c ON s.id_serie = c.id_serie
-                GROUP BY s.id_serie
                 ORDER BY s.titre_serie";
 
         $stmt = $this->pdo->prepare($sql);
@@ -64,8 +62,8 @@ class NetVODRepo
                 $row['descriptif'],
                 $row['annee'],
                 $row['genre'],
-                $row['public'],
-                $row['chemin_img']
+                $row['public_vise'],
+                $row['img']
             );
         }
 

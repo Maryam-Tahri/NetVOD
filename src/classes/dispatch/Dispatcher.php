@@ -27,7 +27,7 @@ class Dispatcher
                 $action = new DefaultAction();
                 $this->renderPage($action->execute());
                 break;
-            case "Catalogue":
+            case "catalogue":
                 $action = new AfficheCatalogue();
                 $this->renderPage($action->execute());
                 break;
@@ -52,6 +52,7 @@ class Dispatcher
             $conn = <<<HTML
             <a href='?action=add-user'>Inscription</a>
             <a href='?action=signin'>Se connecter</a>
+<a href="?action=catalogue">Ajouter une piste</a>
 HTML;
         }else{
             $conn = <<<HTML
@@ -77,7 +78,7 @@ HTML;
                 {$conn}
                 <a href="?action=display-playlist">Mes playlists</a>
                 <a href="?action=add-playlist">Créer une playlist</a>
-                <a href="?action=add-track">Ajouter une piste</a>
+                <a href="?action=catalogue">Ajouter une piste</a>
             </nav>
 
             <main>

@@ -9,9 +9,7 @@ class AfficheCatalogue extends Action
 {
     public function execute(): string
     {
-        if (!isset($_SESSION['user'])) {
-            return "<div>Merci de vous connecter</div>";
-        }
+
 
         $repo = NetVODRepo::getInstance();
         $series = $repo->getAllSeries();
