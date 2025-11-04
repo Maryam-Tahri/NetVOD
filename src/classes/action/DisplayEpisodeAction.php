@@ -10,5 +10,5 @@ class DisplayEpisodeAction extends Action
 <div>Merci de vous connecter pour avoir accès à toutes les fonctionnalités !</div>
 HTML;
         }
-        
+
 }
