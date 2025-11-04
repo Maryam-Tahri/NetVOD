@@ -2,6 +2,7 @@
 
 namespace iutnc\netVOD\repository;
 use Exception;
+use iutnc\netVOD\base\Serie;
 use PDO;
 
 class NetVODRepo
@@ -19,7 +20,7 @@ class NetVODRepo
     public static function getInstance(): NetVODRepo {
         if (self::$instance === null) {
             if (empty(self::$config)) {
-                throw new Exception("Configuration non définie ! Appelle d'abord DeefyRepository::setConfig().");
+                throw new Exception("Configuration non définie ! Appelle d'abord NetVODRepo::setConfig().");
             }
 
             self::$instance = new NetVODRepo(self::$config);
@@ -43,7 +44,30 @@ class NetVODRepo
 
     public function SaveFavourite(int $id_user,int $_id_episode) {
         $stmt = $this->pdo->prepare("SELECT id_liste FROM Liste WHERE id_user = :id_user AND type_liste='preference'");
-        $stmt =$this->pdo->prepare("INSERT INTO ");
+    }
+
+    public function getAllSeries(): array
+    {
+        $sql = "SELECT s.titre_serie, s.descriptif,s.annee,s.genre ,s.public_vise, s.img
+                FROM Serie s
+                ORDER BY s.titre_serie";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+
+        $series = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $series[] = new Serie(
+                $row['titre_serie'],
+                $row['descriptif'],
+                $row['annee'],
+                $row['genre'],
+                $row['public_vise'],
+                $row['img']
+            );
+        }
+
+        return $series;
     }
 
 }

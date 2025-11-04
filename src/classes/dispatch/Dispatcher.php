@@ -5,6 +5,7 @@ namespace iutnc\netVOD\dispatch;
 use iutnc\netVOD\action\AddPlaylistAction;
 use iutnc\netVOD\action\AddPodcastTrackAction;
 use iutnc\netVOD\action\AddTrackAction;
+use iutnc\netVOD\action\AfficheCatalogue;
 use iutnc\netVOD\action\DefaultAction;
 use iutnc\netVOD\action\DeleteTrackAction;
 use iutnc\netVOD\action\DisplayPlaylistAction;
@@ -26,26 +27,11 @@ class Dispatcher
                 $action = new DefaultAction();
                 $this->renderPage($action->execute());
                 break;
-            case "display-playlist":
-                $action = new DisplayPlaylistAction();
+            case "catalogue":
+                $action = new AfficheCatalogue();
                 $this->renderPage($action->execute());
                 break;
-            case "add-playlist":
-                $action = new AddPlaylistAction();
-                $this->renderPage($action->execute());
-                break;
-            case "add-track":
-                $action = new AddTrackAction();
-                $this->renderPage($action->execute());
-                break;
-            case "add-podcast":
-                $action = new AddPodcastTrackAction();
-                $this->renderPage($action->execute());
-                break;
-            case "add-user":
-                $action = new AddUserAction();
-                $this->renderPage($action->execute());
-                break;
+
             case "signin":
                 $action = new SigninAction();
                 $this->renderPage($action->execute());
@@ -54,10 +40,7 @@ class Dispatcher
                 $action = new LogoutAction();
                 $this->renderPage($action->execute());
                 break;
-            case "del-track":
-                $action = new DeleteTrackAction();
-                $this->renderPage($action->execute());
-                break;
+
             default:
                 $this->renderPage("pas d'action");
                 break;
@@ -69,6 +52,7 @@ class Dispatcher
             $conn = <<<HTML
             <a href='?action=add-user'>Inscription</a>
             <a href='?action=signin'>Se connecter</a>
+<a href="?action=catalogue">Ajouter une piste</a>
 HTML;
         }else{
             $conn = <<<HTML
@@ -94,7 +78,7 @@ HTML;
                 {$conn}
                 <a href="?action=display-playlist">Mes playlists</a>
                 <a href="?action=add-playlist">Créer une playlist</a>
-                <a href="?action=add-track">Ajouter une piste</a>
+                <a href="?action=catalogue">Ajouter une piste</a>
             </nav>
 
             <main>

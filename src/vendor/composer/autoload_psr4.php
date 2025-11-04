@@ -6,6 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'iutnc\\deefy\\' => array($baseDir . '/classes'),
-    'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
+    'iutnc\\netVOD\\' => array($baseDir . '/classes'),
 );
