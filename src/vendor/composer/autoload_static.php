@@ -9,7 +9,7 @@ class ComposerStaticInit3c7b1acfe9caf3e9c950f5161b581729
     public static $prefixLengthsPsr4 = array (
         'i' => 
         array (
-            'iutnc\\deefy\\' => 12,
+            'iutnc\\netVOD\\' => 13,
         ),
         'P' => 
         array (
@@ -18,7 +18,7 @@ class ComposerStaticInit3c7b1acfe9caf3e9c950f5161b581729
     );
 
     public static $prefixDirsPsr4 = array (
-        'iutnc\\deefy\\' => 
+        'iutnc\\netVOD\\' => 
         array (
             0 => __DIR__ . '/../..' . '/classes',
         ),
@@ -38,34 +38,15 @@ class ComposerStaticInit3c7b1acfe9caf3e9c950f5161b581729
         'Psr\\Log\\LoggerInterface' => __DIR__ . '/..' . '/psr/log/src/LoggerInterface.php',
         'Psr\\Log\\LoggerTrait' => __DIR__ . '/..' . '/psr/log/src/LoggerTrait.php',
         'Psr\\Log\\NullLogger' => __DIR__ . '/..' . '/psr/log/src/NullLogger.php',
-        'iutnc\\deefy\\action\\Action' => __DIR__ . '/../..' . '/classes/action/Action.php',
-        'iutnc\\deefy\\action\\AddPlaylistAction' => __DIR__ . '/../..' . '/classes/action/AddPlaylistAction.php',
-        'iutnc\\deefy\\action\\AddPodcastTrackAction' => __DIR__ . '/../..' . '/classes/action/AddPodcastTrackAction.php',
-        'iutnc\\deefy\\action\\AddTrackAction' => __DIR__ . '/../..' . '/classes/action/AddTrackAction.php',
-        'iutnc\\deefy\\action\\AddUserAction' => __DIR__ . '/../..' . '/classes/action/AddUserAction.php',
-        'iutnc\\deefy\\action\\DefaultAction' => __DIR__ . '/../..' . '/classes/action/DefaultAction.php',
-        'iutnc\\deefy\\action\\DeleteTrackAction' => __DIR__ . '/../..' . '/classes/action/DeleteTrackAction.php',
-        'iutnc\\deefy\\action\\DisplayPlaylistAction' => __DIR__ . '/../..' . '/classes/action/DisplayPlaylistAction.php',
-        'iutnc\\deefy\\action\\logoutAction' => __DIR__ . '/../..' . '/classes/action/logoutAction.php',
-        'iutnc\\deefy\\action\\signinAction' => __DIR__ . '/../..' . '/classes/action/signinAction.php',
-        'iutnc\\deefy\\audio\\lists\\AudioList' => __DIR__ . '/../..' . '/classes/audio/lists/AudioList.php',
-        'iutnc\\deefy\\audio\\lists\\Playlist' => __DIR__ . '/../..' . '/classes/audio/lists/Playlist.php',
-        'iutnc\\deefy\\audio\\tracks\\Album' => __DIR__ . '/../..' . '/classes/audio/tracks/Album.php',
-        'iutnc\\deefy\\audio\\tracks\\AlbumTrack' => __DIR__ . '/../..' . '/classes/audio/tracks/AlbumTrack.php',
-        'iutnc\\deefy\\audio\\tracks\\AudioTrack' => __DIR__ . '/../..' . '/classes/audio/tracks/AudioTrack.php',
-        'iutnc\\deefy\\audio\\tracks\\PodcastTrack' => __DIR__ . '/../..' . '/classes/audio/tracks/PodcastTrack.php',
-        'iutnc\\deefy\\auth\\AuthnProvider' => __DIR__ . '/../..' . '/classes/auth/AuthnProvider.php',
-        'iutnc\\deefy\\auth\\AuthzProvider' => __DIR__ . '/../..' . '/classes/auth/AuthzProvider.php',
-        'iutnc\\deefy\\dispatch\\Dispatcher' => __DIR__ . '/../..' . '/classes/dispatch/Dispatcher.php',
-        'iutnc\\deefy\\exception\\AuthException' => __DIR__ . '/../..' . '/classes/exception/AuthException.php',
-        'iutnc\\deefy\\exception\\InvalidPropertyNameException' => __DIR__ . '/../..' . '/classes/exception/InvalidPropertyNameException.php',
-        'iutnc\\deefy\\exception\\InvalidPropertyValueException' => __DIR__ . '/../..' . '/classes/exception/InvalidPropertyValueException.php',
-        'iutnc\\deefy\\render\\AlbumTrackRenderer' => __DIR__ . '/../..' . '/classes/render/AlbumTrackRenderer.php',
-        'iutnc\\deefy\\render\\AudioListRenderer' => __DIR__ . '/../..' . '/classes/render/AudioListRenderer.php',
-        'iutnc\\deefy\\render\\AudioTrackRenderer' => __DIR__ . '/../..' . '/classes/render/AudioTrackRenderer.php',
-        'iutnc\\deefy\\render\\PodcastRenderer' => __DIR__ . '/../..' . '/classes/render/PodcastRenderer.php',
-        'iutnc\\deefy\\render\\Renderer' => __DIR__ . '/../..' . '/classes/render/Renderer.php',
-        'iutnc\\deefy\\repository\\DeefyRepository' => __DIR__ . '/../..' . '/classes/repository/DeefyRepository.php',
+        'iutnc\\netVOD\\action\\Action' => __DIR__ . '/../..' . '/classes/action/Action.php',
+        'iutnc\\netVOD\\action\\DefaultAction' => __DIR__ . '/../..' . '/classes/action/DefaultAction.php',
+        'iutnc\\netVOD\\action\\LogoutAction' => __DIR__ . '/../..' . '/classes/action/LogoutAction.php',
+        'iutnc\\netVOD\\action\\SigninAction' => __DIR__ . '/../..' . '/classes/action/SigninAction.php',
+        'iutnc\\netVOD\\auth\\AuthnProvider' => __DIR__ . '/../..' . '/classes/auth/AuthnProvider.php',
+        'iutnc\\netVOD\\auth\\AuthzProvider' => __DIR__ . '/../..' . '/classes/auth/AuthzProvider.php',
+        'iutnc\\netVOD\\dispatch\\Dispatcher' => __DIR__ . '/../..' . '/classes/dispatch/Dispatcher.php',
+        'iutnc\\netVOD\\exception\\AuthException' => __DIR__ . '/../..' . '/classes/exception/AuthException.php',
+        'iutnc\\netVOD\\repository\\NetVODRepo' => __DIR__ . '/../..' . '/classes/repository/NetVODRepo.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
