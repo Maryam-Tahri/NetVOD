@@ -1,9 +1,10 @@
-CREATE TABLE User (
+CREATE TABLE Users (
     id_user INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role int NOT NULL,
-    carte_credit VARCHAR(255)
+    carte_credit VARCHAR(255),
+    role int(11)
 ) ENGINE=InnoDB;
 
 CREATE TABLE Serie (
@@ -31,32 +32,34 @@ CREATE TABLE Episode (
 
 CREATE TABLE Liste (
     id_liste INT PRIMARY KEY AUTO_INCREMENT,
-    id_user INT NOT NULL,
     type_list ENUM('preference', 'en_cours', 'deja_visionne') NOT NULL,
     FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
     UNIQUE KEY unique_user_type (id_user, type_list)
 ) ENGINE=InnoDB;
 
+CREATE TABLE User2List (
+    id_liste INT NOT NULL,
+    id_user INT NOT NULL,
+    PRIMARY KEY (id_liste,id_user)
+)
+
 CREATE TABLE list2episode (
     id_liste INT NOT NULL,
     id_ep INT NOT NULL,
-    date_ajout TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id_liste, id_ep),
     FOREIGN KEY (id_liste) REFERENCES Liste(id_liste) ON DELETE CASCADE,
     FOREIGN KEY (id_ep) REFERENCES Episode(id_ep) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE Commentaire (
-    id_commentaire INT PRIMARY KEY AUTO_INCREMENT,
     id_user INT NOT NULL,
-    id_serie INT NOT NULL,
+    id_ep INT NOT NULL,
     commentaire TEXT,
     note INT,
     date_commentaire TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_user, id_ep),
     FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
-    FOREIGN KEY (id_serie) REFERENCES Serie(id_serie) ON DELETE CASCADE,
-    UNIQUE KEY unique_user_serie (id_user, id_serie)
-    
+    FOREIGN KEY (id_ep) REFERENCES Episode(id_ep) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 
