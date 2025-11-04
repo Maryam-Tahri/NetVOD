@@ -22,6 +22,9 @@ HTML;
             }
             $html = "<h2>Connexion</h2>
                 <form method='post' action='?action=signin'>
+                    <label for='NomUser'>Nom d'utilisateur :</label><br>
+                    <input type='text' name='NomUser' id='NomUser' required><br><br>
+                    
                     <label for='email'>Email :</label><br>
                     <input type='text' name='email' id='email' required><br><br>
 
@@ -37,6 +40,7 @@ HTML;
             if (!isset($_SESSION['try'])){
                 $_SESSION['try'] = 0;
             }
+            $nomUser = $_POST['NomUser'];
             $email = filter_var($_POST['email'],FILTER_VALIDATE_EMAIL);
             $pswd = filter_var($_POST['mdp'],FILTER_SANITIZE_STRING);
             try{
