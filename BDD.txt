@@ -1,0 +1,94 @@
+CREATE TABLE User (
+    id_user INT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    carte_credit VARCHAR(255)
+) ENGINE=InnoDB;
+
+CREATE TABLE Serie (
+    id_serie INT PRIMARY KEY AUTO_INCREMENT,
+    titre_serie VARCHAR(255) NOT NULL,
+    descriptif TEXT,
+    img VARCHAR(255),
+    annee INT,
+    date_ajout DATE,
+    genre VARCHAR(100),
+    public_vise VARCHAR(50)
+) ENGINE=InnoDB;
+
+CREATE TABLE Episode (
+    id_ep INT PRIMARY KEY AUTO_INCREMENT,
+    id_serie INT NOT NULL,
+    numero INT NOT NULL,
+    titre_ep VARCHAR(255) NOT NULL,
+    resume_ep TEXT,
+    duree INT,
+    img VARCHAR(255),
+    file VARCHAR(255),
+    FOREIGN KEY (id_serie) REFERENCES Serie(id_serie) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE Liste (
+    id_liste INT PRIMARY KEY AUTO_INCREMENT,
+    id_user INT NOT NULL,
+    type_list ENUM('preference', 'en_cours', 'deja_visionne') NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_type (id_user, type_list)
+) ENGINE=InnoDB;
+
+CREATE TABLE list2episode (
+    id_liste INT NOT NULL,
+    id_ep INT NOT NULL,
+    date_ajout TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_liste, id_ep),
+    FOREIGN KEY (id_liste) REFERENCES Liste(id_liste) ON DELETE CASCADE,
+    FOREIGN KEY (id_ep) REFERENCES Episode(id_ep) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE Commentaire (
+    id_commentaire INT PRIMARY KEY AUTO_INCREMENT,
+    id_user INT NOT NULL,
+    id_serie INT NOT NULL,
+    commentaire TEXT,
+    note INT,
+    date_commentaire TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (id_serie) REFERENCES Serie(id_serie) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_serie (id_user, id_serie)
+    
+) ENGINE=InnoDB;
+
+
+
+
+INSERT INTO episode (id_ep, numero, titre_ep, resume_ep, duree, file, id_serie) VALUES
+(1, 1, 'Le lac', 'Le lac se révolte', 8, 'lake.mp4', 1),
+(2, 2, 'Le lac : les mystères de l\'eau trouble', 'Un grand mystère, l\'eau du lac est trouble. Jack trouvera-t-il la solution ?', 8, 'lake.mp4', 1),
+(3, 3, 'Le lac : les mystères de l\'eau sale', 'Un grand mystère, l\'eau du lac est sale. Jack trouvera-t-il la solution ?', 8, 'lake.mp4', 1),
+(4, 4, 'Le lac : les mystères de l\'eau chaude', 'Un grand mystère, l\'eau du lac est chaude. Jack trouvera-t-il la solution ?', 8, 'lake.mp4', 1),
+(5, 5, 'Le lac : les mystères de l\'eau froide', 'Un grand mystère, l\'eau du lac est froide. Jack trouvera-t-il la solution ?', 8, 'lake.mp4', 1),
+(6, 1, 'Eau calme', 'L\'eau coule tranquillement au fil du temps.', 15, 'water.mp4', 2),
+(7, 2, 'Eau calme 2', 'Le temps a passé, l\'eau coule toujours tranquillement.', 15, 'water.mp4', 2),
+(8, 3, 'Eau moins calme', 'Le temps des tourments est pour bientôt, l\'eau s\'agite et le temps passe.', 15, 'water.mp4', 2),
+(9, 4, 'La tempête', 'C\'est la tempête, l\'eau est en pleine agitation. Jack trouvera-t-il la solution ?', 15, 'water.mp4', 2),
+(10, 5, 'Le calme après la tempête', 'La tempête est passée, l\'eau retrouve son calme. Jack part en vacances.', 15, 'water.mp4', 2),
+(11, 1, 'Les chevaux s\'amusent', 'Les chevaux s\'amusent bien, ils ont apporté les raquettes pour faire un tournoi de badminton.', 7, 'horses.mp4', 3),
+(12, 2, 'Les chevals fous', '- Oh regarde, des beaux chevals !! - Non, des chevaux, des CHEVAUX !', 7, 'horses.mp4', 3),
+(13, 3, 'Les chevaux de l\'étoile noire', 'Les chevaux de l\'Étoile Noire débarquent sur terre et mangent toute l\'herbe !', 7, 'horses.mp4', 3),
+(14, 1, 'Tous à la plage', 'C\'est l\'été, tous à la plage pour profiter du soleil et de la mer.', 18, 'beach.mp4', 4),
+(15, 2, 'La plage le soir', 'À la plage le soir, il n\'y a personne, c\'est tout calme.', 18, 'beach.mp4', 4),
+(16, 3, 'La plage le matin', 'À la plage le matin, il n\'y a personne non plus, c\'est tout calme et le jour se lève.', 18, 'beach.mp4', 4),
+(17, 1, 'Champion de surf', 'Jack fait du surf le matin, le midi, le soir, même la nuit. C\'est un pro.', 11, 'surf.mp4', 5),
+(18, 2, 'Surf détective', 'Une planche de surf a été volée. Jack mène l\'enquête.', 11, 'surf.mp4', 5),
+(19, 3, 'Surf amitié', 'En fait la planche n\'avait pas été volée, c\'était une blague. Jack et Jim fêtent leur amitié.', 11, 'surf.mp4', 5),
+(20, 1, 'Ça roule, ça roule', 'Jack fonce dans sa camionnette pour rejoindre le spot de surf.', 27, 'cars-by-night.mp4', 6),
+(21, 2, 'Ça roule, ça roule toujours', 'Jim fonce avec son taxi pour rejoindre Jack à la plage. Le mystère du lac trouve sa solution.', 27, 'cars-by-night.mp4', 6);
+
+
+INSERT INTO serie (id_serie, titre_serie, descriptif, img, annee, date_ajout) VALUES
+(1, 'Le lac aux mystères', 'C\'est l\'histoire d\'un lac mystérieux et plein de surprises. La série, bluffante et haletante, nous entraine dans un labyrinthe d\'intrigues époustouflantes. A ne rater sous aucun prétexte !', '', 2020, '2022-10-30'),
+(2, 'L\'eau a coulé', 'Une série nostalgique qui nous invite à revisiter notre passé et à se remémorer tout ce qui s\'est passé depuis que tant d\'eau a coulé sous les ponts.', '', 1907, '2022-10-29'),
+(3, 'Chevaux fous', 'Une série sur la vie des chevals sauvages en liberté. Décoiffante.', '', 2017, '2022-10-31'),
+(4, 'A la plage', 'Le succès de l\'été 2021, à regarder sans modération et entre amis.', '', 2021, '2022-11-04'),
+(5, 'Champion', 'La vie trépidante de deux champions de surf, passionnés dès leur plus jeune age. Ils consacrent leur vie à ce sport.', '', 2022, '2022-11-03'),
+(6, 'Une ville la nuit', 'C\'est beau une ville la nuit, avec toutes ces voitures qui passent et qui repassent. La série suit un livreur, un chauffeur de taxi, et un insomniaque. Tous parcourent la grande ville une fois la nuit venue, au volant de leur véhicule.', '', 2017, '2022-10-31');
