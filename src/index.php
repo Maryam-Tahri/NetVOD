@@ -2,10 +2,10 @@
 
 require_once 'vendor/autoload.php';
 use iutnc\netVOD\dispatch\Dispatcher;
-use iutnc\netVOD\repository\DeefyRepository;
+use iutnc\netVOD\repository\NetVODRepo;
 
 try{
-    DeefyRepository::setConfig('../../../../db.config.ini');
+    NetVODRepo::setConfig('../../../../db.config.ini');
 }catch(Exception $e){
     echo $e->getMessage();
 }
