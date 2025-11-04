@@ -1,8 +1,8 @@
 <?php
 
 require_once 'vendor/autoload.php';
-use iutnc\deefy\dispatch\Dispatcher;
-use iutnc\deefy\repository\DeefyRepository;
+use iutnc\netVOD\dispatch\Dispatcher;
+use iutnc\netVOD\repository\DeefyRepository;
 
 try{
     DeefyRepository::setConfig('../../../../db.config.ini');

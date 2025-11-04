@@ -2,8 +2,8 @@
 
 namespace iutnc\netVOD\auth;
 
-use iutnc\deefy\repository\DeefyRepository;
-use iutnc\deefy\exception\AuthException;
+use iutnc\netVOD\repository\DeefyRepository;
+use iutnc\netVOD\exception\AuthException;
 use PDO;
 use PDOException;
 

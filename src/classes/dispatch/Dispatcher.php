@@ -2,15 +2,15 @@
 
 namespace iutnc\netVOD\dispatch;
 
-use iutnc\deefy\action\AddPlaylistAction;
-use iutnc\deefy\action\AddPodcastTrackAction;
-use iutnc\deefy\action\AddTrackAction;
-use iutnc\deefy\action\DefaultAction;
-use iutnc\deefy\action\DeleteTrackAction;
-use iutnc\deefy\action\DisplayPlaylistAction;
-use iutnc\deefy\action\AddUserAction;
-use iutnc\deefy\action\logoutAction;
-use iutnc\deefy\action\signinAction;
+use iutnc\netVOD\action\AddPlaylistAction;
+use iutnc\netVOD\action\AddPodcastTrackAction;
+use iutnc\netVOD\action\AddTrackAction;
+use iutnc\netVOD\action\DefaultAction;
+use iutnc\netVOD\action\DeleteTrackAction;
+use iutnc\netVOD\action\DisplayPlaylistAction;
+use iutnc\netVOD\action\AddUserAction;
+use iutnc\netVOD\action\logoutAction;
+use iutnc\netVOD\action\signinAction;
 
 class Dispatcher
 {
