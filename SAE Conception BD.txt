@@ -1,0 +1,94 @@
+SAE Conception BD
+
+1:
+    
+    id_ep          int(11)          NOT NULLABLE
+    numero         int(11)          NOT NULLABLE 
+    titre_ep       varchar(128)     NOT NULLABLE
+    resume_ep      varchar(128)     NULLABLE
+    duree          int(11)          NOT NULLABE
+    file           varchar(256)     NULLABLE
+    serie_id       int(11)          NULLABLE
+    id_serie       int(11)          NOT NULLABLE 
+    titre_serie    varchar(128)     NOT NULLABLE
+    descriptif     varchar(255)     NOT NULLABLE
+    img            varchar(256)     NOT NULLABLE
+    annee          int(11)          NOT NULLABLE
+    date_ajout     date             NOT NULLABLE
+    id_user        int(11)          NOT NULLABLE
+    email          varchar(128)     NOT NULLABLE
+    nom_user       varchar(128)     NOT NULLABLE
+    prenom_user    varchar(128)     NOT NULLABLE
+    password       varchar(255)     NOT NULLABLE chiffré
+    carte_credit   varchar(255)     NOT NULLABLE chiffré
+    type_video     varchar(128)     NOT NULLABLE
+    id_genre       int(11)          NOT NULLABLE
+    nom_genre      varchar(128)     NOT NULLABLE
+    id_typepublic  int(11)          NOT NULLABLE
+    nom_typepublic varchar(128)     NOT NULLABLE 
+    id_saison      int(11)          NOT NULLABLE
+    numero_saison  varchar(128)     NOT NULLABLE  
+    note           int(11)          NOT NULLABLE 
+    commentaire    text             NOT NULLABLE 
+    id_liste       int(11)          NOT NULLABLE 
+    type_liste     varchar(128)     NOT NULLABLE  
+
+
+
+
+     
+
+
+
+
+2:
+
+id_ep →    titre_ep 
+           resume_ep
+           duree
+           file
+           type_video
+           id_genre
+           id_typepublic
+
+id_genre → nom_genre
+
+id_typepublic → nom_typepublic
+
+id_user →        email
+                 nom_user
+                 prenom_user
+                 password
+                 carte_credit
+
+titre_ep → serie_id
+           id_ep
+
+id_saison → numero_saison
+            id_ep
+
+id_ep, id_user → note
+                 commentaire
+                 
+
+id_liste → type_liste
+           id_user 
+
+
+3:
+
+{id_ep, id_user}
+
+
+4:
+1NF OK - Tout attribut a une valeur atomique. Par exemple : le nom et le prénom de l'utilisateur sont séparé : nom_user, prenom_user.
+2NF OK - Tout attribut dépend de l’ensemble de la clé (pas de dépendance partielle entre un attribut non clé et une partie de la clé). Par exemple : titre_ep n'est pas associé aux clés id_ep, id_user mais seulement à id_ep.
+3NF OK - Tous les attributs non clés sont directement et pleinement dépendant des clés. Par exemple : titre_ep dépend seulement de id_ep et d'aucun autre attributs non clés.
+
+5:
+Episode(id_ep,id_serie,numero,titre_ep,resume_ep,duree,file)
+Serie(id_serie,titre_serie,descriptif,img,annee,date_ajout)
+User(id_user,email,password,carte_credit)
+Liste(id_user,id_liste,type_list)
+list2episode(id_liste,id_ep)
+Commentaire(id_user,id_ep,commentaire,note)
