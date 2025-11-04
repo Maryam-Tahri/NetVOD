@@ -3,7 +3,7 @@ CREATE TABLE Users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role int NOT NULL,
-    carte_credit VARCHAR(255),
+    carte_credit VARCHAR(255)
 ) ENGINE=InnoDB;
 
 CREATE TABLE Serie (
@@ -33,8 +33,7 @@ CREATE TABLE Liste (
     id_liste INT AUTO_INCREMENT,
     id_user INT,
     type_list ENUM('preference', 'en_cours', 'deja_visionne') NOT NULL,
-    FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
-    UNIQUE KEY unique_user_type (id_user, type_list),
+    FOREIGN KEY (id_user) REFERENCES Users(id_user) ON DELETE CASCADE,
     PRIMARY KEY (id_liste,id_user)
 ) ENGINE=InnoDB;
 
@@ -54,12 +53,9 @@ CREATE TABLE Commentaire (
     note INT,
     date_commentaire TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id_user, id_ep),
-    FOREIGN KEY (id_user) REFERENCES User(id_user) ON DELETE CASCADE,
+    FOREIGN KEY (id_user) REFERENCES Users(id_user) ON DELETE CASCADE,
     FOREIGN KEY (id_ep) REFERENCES Episode(id_ep) ON DELETE CASCADE
 ) ENGINE=InnoDB;
-
-
-
 
 INSERT INTO episode (id_ep, numero, titre_ep, resume_ep, duree, file, id_serie) VALUES
 (1, 1, 'Le lac', 'Le lac se révolte', 8, 'lake.mp4', 1),
