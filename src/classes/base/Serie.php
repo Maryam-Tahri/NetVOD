@@ -22,4 +22,12 @@ class Serie
     }
 
 
+    public function __get($nom) : mixed{
+        if (property_exists($this, $nom)){
+            return $this->$nom;
+        }else{
+            return new \Exception("La variable $nom n'existe pas");
+        }
+    }
+
 }
