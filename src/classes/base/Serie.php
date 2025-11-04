@@ -10,6 +10,7 @@ class Serie
     private String $genre;
     private String $public;
     private String $cheminImg;
+    private array $listeEpisodes;
 
     public function __construct($titre, $descriptif, $annee, $genre, $public, $cheminImg)
     {
@@ -19,6 +20,7 @@ class Serie
         $this->genre = $genre;
         $this->public = $public;
         $this->cheminImg = $cheminImg;
+        $this->listeEpisodes = array();
     }
 
 
@@ -29,5 +31,10 @@ class Serie
             return new \Exception("La variable $nom n'existe pas");
         }
     }
+
+    public function addEpisode(Episode $episode){
+        $this->listeEpisodes[] = $episode;
+    }
+
 
 }
