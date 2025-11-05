@@ -12,6 +12,7 @@ use iutnc\netVOD\action\DisplayPlaylistAction;
 use iutnc\netVOD\action\AddUserAction;
 use iutnc\netVOD\action\logoutAction;
 use iutnc\netVOD\action\signinAction;
+use iutnc\netVOD\action\AjouterFavoris;
 
 class Dispatcher
 {
@@ -42,8 +43,9 @@ class Dispatcher
                 break;
             case 'ajouter-favoris':
                 $action = new AjouterFavoris();
+                $this->renderPage($action->execute());
                 break;
-                
+
             default:
                 $this->renderPage("pas d'action");
                 break;
