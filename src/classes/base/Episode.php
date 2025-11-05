@@ -2,6 +2,8 @@
 
 namespace iutnc\netVOD\base;
 
+use Exception;
+
 class Episode
 {
     private int $numEpisode;
@@ -25,7 +27,7 @@ class Episode
         if (property_exists($this, $nom)){
             return $this->$nom;
         }else{
-            return new \Exception("La variable $nom n'existe pas");
+            throw new \Exception("La variable $nom n'existe pas");
         }
     }
 
