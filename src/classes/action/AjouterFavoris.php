@@ -30,7 +30,6 @@ class AjouterFavoris extends Action
         try {
             $repo = NetVODRepo::getInstance();
             $repo->SaveFavourite($_SESSION['user']['id'], $id_episode);
-
             return "<div class='success'>Épisode ajouté aux favoris !</div>";
         } catch (Exception $e) {
             return "<div class='error'>Erreur : " . htmlspecialchars($e->getMessage()) . "</div>";

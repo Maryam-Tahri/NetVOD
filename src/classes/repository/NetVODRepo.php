@@ -53,31 +53,36 @@ class NetVODRepo
 
     public function SaveFavourite(int $id_user, int $id_episode): void
     {
-        $stmt = $this->pdo->prepare("SELECT id_liste FROM Liste WHERE id_user = :id_user AND type_liste='preference'");
+        // Récupérer l'id de la liste de favoris de l'utilisateur
+        $stmt = $this->pdo->prepare("SELECT id_liste FROM Liste WHERE id_user = :id_user AND type_list='preference'");
         $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$result) {
-            throw new \Exception("Liste de préférences introuvable");
+            throw new \Exception("Liste de favoris introuvable");
         }
 
         $id_liste = $result['id_liste'];
 
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM list2episode WHERE id_liste = :id_liste AND id_episode = :id_episode");
+        // Vérifier si l'épisode est déjà présent
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM list2episode WHERE id_liste = :id_liste AND id_ep = :id_ep");
         $stmt->bindParam(':id_liste', $id_liste, PDO::PARAM_INT);
-        $stmt->bindParam(':id_episode', $id_episode, PDO::PARAM_INT);
+        $stmt->bindParam(':id_ep', $id_episode, PDO::PARAM_INT);
         $stmt->execute();
 
         if ($stmt->fetchColumn() > 0) {
             throw new \Exception("Cet épisode est déjà dans vos favoris");
         }
 
-        $stmt = $this->pdo->prepare("INSERT INTO list2episode (id_liste, id_episode) VALUES(:id_liste, :id_episode)");
+        // Ajouter l'épisode à la liste
+        $stmt = $this->pdo->prepare("INSERT INTO list2episode (id_liste, id_ep) VALUES(:id_liste, :id_ep)");
         $stmt->bindParam(':id_liste', $id_liste, PDO::PARAM_INT);
-        $stmt->bindParam(':id_episode', $id_episode, PDO::PARAM_INT);
+        $stmt->bindParam(':id_ep', $id_episode, PDO::PARAM_INT);
         $stmt->execute();
     }
+
+
 
     public function getAllSeries(): array
     {
