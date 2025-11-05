@@ -9,23 +9,21 @@ class AfficheSerie extends Action
 {
     public function execute(): string
     {
-        $repo = NetVODRepo::getInstance();
-        $series = $repo->getAllSeries();
-
-        $html = '<div class="catalogue-container">';
-        $html .= '<h1>Catalogue des séries</h1>';
-
-        if (empty($series)) {
-            $html .= '<p class="no-content">Aucune série disponible pour le moment.</p>';
-        } else {
-            $html .= '<div class="series-grid">';
-            foreach ($series as $serie) {
-                $renderer = new SerieRenderer();
-                $html .= $renderer->render($serie);
-            }
-            $html .= '</div>';
+        if (!isset($_GET['id'])) {
+            return "<p>Erreur : aucune série sélectionnée.</p>";
         }
 
+        $idSerie = (int)$_GET['id'];
+        $repo = NetVODRepo::getInstance();
+        $serie = $repo->getSerieById($idSerie);
+
+        if ($serie === null) {
+            return "<p>Erreur : série introuvable.</p>";
+        }
+
+        $renderer = new SerieRenderer();
+        $html = '<div class="serie-detail-container">';
+        $html .= $renderer->renderSerieEpisode($serie);
         $html .= '</div>';
 
         return $html;

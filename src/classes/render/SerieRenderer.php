@@ -8,13 +8,16 @@ class SerieRenderer
 {
     public function render(Serie $serie): string
     {
-        $titre = $serie->titre;
-        $img =$serie->cheminImg;
+        $titre = htmlspecialchars($serie->titre);
+        $img = htmlspecialchars($serie->cheminImg);
+        $id = $serie->id;
 
         $html = <<<HTML
         <div class="serie-card">
-            <img class="serie" src="$img" alt="$titre">
-            <h2>$titre</h2>
+            <a href="?action=serie&id=$id">
+                <img class="serie" src="$img" alt="$titre">
+                <h2>$titre</h2>
+            </a>
         </div>
         HTML;
 

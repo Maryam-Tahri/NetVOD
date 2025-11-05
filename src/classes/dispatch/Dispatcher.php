@@ -6,6 +6,7 @@ use iutnc\netVOD\action\AddPlaylistAction;
 use iutnc\netVOD\action\AddPodcastTrackAction;
 use iutnc\netVOD\action\AddTrackAction;
 use iutnc\netVOD\action\AfficheCatalogue;
+use iutnc\netVOD\action\AfficheSerie;
 use iutnc\netVOD\action\DefaultAction;
 use iutnc\netVOD\action\DeleteTrackAction;
 use iutnc\netVOD\action\DisplayPlaylistAction;
@@ -40,7 +41,10 @@ class Dispatcher
                 $action = new LogoutAction();
                 $this->renderPage($action->execute());
                 break;
-
+            case "serie":
+                $action = new AfficheSerie();
+                $this->renderPage($action->execute());
+                break;
             default:
                 $this->renderPage("pas d'action");
                 break;
@@ -53,6 +57,7 @@ class Dispatcher
             <a href='?action=add-user'>Inscription</a>
             <a href='?action=signin'>Se connecter</a>
             <a href="?action=catalogue">Afficher le catalogue</a>
+            <a href="?action=serie"></a>
 HTML;
         }else{
             $conn = <<<HTML

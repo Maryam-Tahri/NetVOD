@@ -49,7 +49,7 @@ class NetVODRepo
 
     public function getAllSeries(): array
     {
-        $sql = "SELECT s.titre_serie, s.descriptif,s.annee,s.genre ,s.public_vise, s.img
+        $sql = "SELECT *
                 FROM Serie s
                 ORDER BY s.titre_serie";
 
@@ -59,6 +59,7 @@ class NetVODRepo
         $series = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $series[] = new Serie(
+                $row['id_serie'],
                 $row['titre_serie'],
                 $row['descriptif'],
                 $row['annee'],
@@ -82,7 +83,8 @@ class NetVODRepo
         $episodes = $this->getEpisodeBySerieID($idSerie);
 
         $s = new Serie(
-            $serie['titre'],
+            $serie['id_serie'],
+            $serie['titre_serie'],
             $serie['descriptif'],
             $serie['annee'],
             $serie['genre'],
@@ -104,19 +106,19 @@ class NetVODRepo
     {
 
 
-        $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_serie = ? ORDER BY num_episode ASC");
+        $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_serie = ? ORDER BY numero ASC");
         $stmt->execute([$idSerie]);
         $episodesData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $episodes = [];
         foreach ($episodesData as $ep) {
             $episodes[] = new Episode(
-                $ep['num_episode'],
-                $ep['titre'],
-                $ep['resume'],
+                $ep['numero'],
+                $ep['titre_ep'],
+                $ep['resume_ep'],
                 $ep['duree'],
-                $ep['chemin_img'],
-                $ep['chemin_video']
+                $ep['img'],
+                $ep['file']
             );
         }
 

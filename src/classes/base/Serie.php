@@ -14,8 +14,11 @@ class Serie
     private String $cheminImg;
     private array $listeEpisodes;
 
-    public function __construct($titre, $descriptif, $annee, $genre, $public, $cheminImg)
+    private int $id;
+
+    public function __construct( $id,$titre, $descriptif, $annee, $genre, $public, $cheminImg)
     {
+        $this->id = $id;
         $this->titre = $titre;
         $this->descriptif = $descriptif;
         $this->annee = $annee;
@@ -37,9 +40,7 @@ class Serie
         $this->listeEpisodes[] = $episode;
     }
 
-    public function addEpisode(Episode $episode){
-        $this->listeEpisodes[] = $episode;
-    }
+
 
 
 
