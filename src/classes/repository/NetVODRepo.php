@@ -80,8 +80,8 @@ class NetVODRepo
         if (!$serie) return null;
 
         $episodes = $this->getEpisodeBySerieID($idSerie);
-        // 3️⃣ Création de l’objet Serie complet
-        return new Serie(
+
+        $s = new Serie(
             $serie['titre'],
             $serie['descriptif'],
             $serie['annee'],
@@ -90,7 +90,12 @@ class NetVODRepo
             $serie['img'],
         );
 
-            $episodes
+        foreach ($episodes as $episode) {
+            $s->AddEpisode($episode);
+        }
+
+        return $s;
+
 
     }
 
