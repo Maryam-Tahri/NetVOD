@@ -2,13 +2,13 @@
 
 namespace iutnc\netVOD\auth;
 
-use iutnc\netVOD\repository\DeefyRepository;
+use iutnc\netVOD\repository\NetVODRepo;
 use iutnc\netVOD\exception\AuthException;
 class AuthnProvider {
 
     public static function signin(string $email,
                                   string $passwd2check): bool {
-        $bdd = DeefyRepository::getInstance()->getPDO();
+        $bdd = NetVODRepo::getInstance()->getPDO();
         $user = $bdd->prepare("SELECT id_user, password FROM Users WHERE email = ?");
         $user->bindParam(1, $email);
         $user->execute();
@@ -28,7 +28,7 @@ class AuthnProvider {
     }
 
     public static function register(string $email,string $passwd): int {
-        $bdd = DeefyRepository::getInstance()->getPDO();
+        $bdd = NetVODRepo::getInstance()->getPDO();
         $user = $bdd->prepare("SELECT email FROM Users WHERE email = ?");
         $user->bindParam(1, $email);
         $user->execute();

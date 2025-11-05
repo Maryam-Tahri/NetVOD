@@ -4,10 +4,10 @@ namespace iutnc\netVOD\repository;
 
 use PDO;
 
-class DeefyRepository
+class NetVODRepo
 {
     private PDO $pdo;
-    private static ?DeefyRepository $instance = null;
+    private static ?NetVODRepo $instance = null;
     private static array $config = [];
 
     private function __construct(array $conf) {
@@ -16,13 +16,13 @@ class DeefyRepository
         ]);
     }
 
-    public static function getInstance(): DeefyRepository {
+    public static function getInstance(): NetVODRepo {
         if (self::$instance === null) {
             if (empty(self::$config)) {
-                throw new Exception("Configuration non définie ! Appelle d'abord DeefyRepository::setConfig().");
+                throw new Exception("Configuration non définie ! Appelle d'abord NetVODRepo::setConfig().");
             }
 
-            self::$instance = new DeefyRepository(self::$config);
+            self::$instance = new NetVODRepo(self::$config);
         }
         return self::$instance;
     }

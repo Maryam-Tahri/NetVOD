@@ -2,7 +2,7 @@
 
 namespace iutnc\netVOD\auth;
 
-use iutnc\netVOD\repository\DeefyRepository;
+use iutnc\netVOD\repository\NetVODRepo;
 use iutnc\netVOD\exception\AuthException;
 use PDO;
 use PDOException;
@@ -13,7 +13,7 @@ class AuthzProvider
     public static int $USER = 1;
 
     public static function checkRole(int $role){
-        $bdd = DeefyRepository::getInstance()->getPDO();
+        $bdd = NetVODRepo::getInstance()->getPDO();
         $stmt = $bdd->prepare("SELECT role FROM Users WHERE id = :id");
         $stmt->bindValue(':id', $_SESSION['user']['id']);
         $stmt->execute();
@@ -22,7 +22,7 @@ class AuthzProvider
     }
 
     public static function checkPlaylistOwner(string $playlistId){
-        $bdd = DeefyRepository::getInstance()->getPDO();
+        $bdd = NetVODRepo::getInstance()->getPDO();
         $stmt = $bdd->prepare("SELECT id_user FROM user2playlist WHERE id_pl = :id_pl");
         $stmt->bindValue(':id_pl', $playlistId);
         $stmt->execute();
