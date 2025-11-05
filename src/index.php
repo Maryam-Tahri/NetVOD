@@ -8,7 +8,7 @@ use iutnc\netVOD\render\SerieRenderer;
 use iutnc\netVOD\repository\NetVODRepo;
 
 try{
-    NetVODRepo::setConfig('../../../../db.config.ini');
+    NetVODRepo::setConfig(__DIR__ . '/db.config.ini');
 }catch(Exception $e){
     echo $e->getMessage();
 }
@@ -21,8 +21,3 @@ $dispatcher->run();
 $test = new \iutnc\netVOD\base\Serie("joie", "que je doie", 2025, "comédie", "adulte", "img/joie.jpg");
 $renderer = new SerieRenderer();
 echo $renderer->render($test);
-
-
-
-
-

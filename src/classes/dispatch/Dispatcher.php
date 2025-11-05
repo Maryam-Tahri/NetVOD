@@ -40,7 +40,10 @@ class Dispatcher
                 $action = new LogoutAction();
                 $this->renderPage($action->execute());
                 break;
-
+            case 'ajouter-favoris':
+                $action = new AjouterFavoris();
+                break;
+                
             default:
                 $this->renderPage("pas d'action");
                 break;

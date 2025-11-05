@@ -33,11 +33,15 @@ class NetVODRepo
 
     public static function setConfig(string $file)
     {
+        if (!file_exists($file)) {
+            throw new Exception("Configuration file not found: " . $file);
+        }
+
         $conf = parse_ini_file($file);
         if ($conf === false) {
             throw new Exception("Error reading configuration file");
         }
-        $conf = parse_ini_file($file);
+
         $dsn = "{$conf['driver']}:host={$conf['host']};dbname={$conf['database']}";
         self::$config = ['dsn' => $dsn, 'user' => $conf['username'], 'pass' => $conf['password']];
     }
@@ -47,14 +51,37 @@ class NetVODRepo
         return $this->pdo;
     }
 
-    public function SaveFavourite(int $id_user, int $_id_episode)
+    public function SaveFavourite(int $id_user, int $id_episode): void
     {
         $stmt = $this->pdo->prepare("SELECT id_liste FROM Liste WHERE id_user = :id_user AND type_liste='preference'");
+        $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$result) {
+            throw new \Exception("Liste de préférences introuvable");
+        }
+
+        $id_liste = $result['id_liste'];
+
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM list2episode WHERE id_liste = :id_liste AND id_episode = :id_episode");
+        $stmt->bindParam(':id_liste', $id_liste, PDO::PARAM_INT);
+        $stmt->bindParam(':id_episode', $id_episode, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->fetchColumn() > 0) {
+            throw new \Exception("Cet épisode est déjà dans vos favoris");
+        }
+
+        $stmt = $this->pdo->prepare("INSERT INTO list2episode (id_liste, id_episode) VALUES(:id_liste, :id_episode)");
+        $stmt->bindParam(':id_liste', $id_liste, PDO::PARAM_INT);
+        $stmt->bindParam(':id_episode', $id_episode, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     public function getAllSeries(): array
     {
-        $sql = "SELECT s.titre_serie, s.descriptif,s.annee,s.genre ,s.public_vise, s.img
+        $sql = "SELECT s.titre_serie, s.descriptif, s.annee, s.genre, s.public_vise, s.img
                 FROM Serie s
                 ORDER BY s.titre_serie";
 
@@ -100,15 +127,10 @@ class NetVODRepo
         }
 
         return $s;
-
-
     }
-
 
     public function getEpisodeBySerieID(int $idSerie): array
     {
-
-
         $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_serie = ? ORDER BY num_episode ASC");
         $stmt->execute([$idSerie]);
         $episodesData = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -126,13 +148,7 @@ class NetVODRepo
         }
 
         return $episodes;
-        $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-        $stmt->execute();
-        $id_liste = $stmt->fetch(PDO::FETCH_ASSOC);
-        $stmt = $this->pdo->prepare("INSERT INTO list2episode (id_liste, id_episode) VALUES(:id_lsite, :id_episode) ");
-        $stmt->bindParam(':id_user', $id_liste, PDO::PARAM_INT);
-        $stmt->bindParam(':id_episode', $_id_episode, PDO::PARAM_INT);
-        $stmt->execute();
     }
+
 
 }
