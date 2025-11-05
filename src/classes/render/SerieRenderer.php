@@ -35,15 +35,16 @@ class SerieRenderer
 
         $html .= "<h3>Liste des épisodes :</h3><div class='episodes'>";
         foreach ($serie->listeEpisodes as $ep) {
-            $html .= "
-                <div class='episode'>
-                    <img src='{$ep->cheminImg}' alt='Image de l’épisode'>
-                    <p><strong>Épisode {$ep->numEpisode} : {$ep->titre}</strong></p>
-                    <p>Durée : {$ep->duree} min</p>
-                </div>
-            ";
+            $html .= <<<HTML
+            <div class='episode'>
+            <a href='?action=episode&id={$ep->numEpisode}'>
+                <img src='{$ep->cheminImg}' alt='Image de l’épisode'>
+                <p><strong>Épisode {$ep->numEpisode} : {$ep->titre}</strong></p>
+                <p>Durée : {$ep->duree} min</p>
+            </a>
+        </div>
+    HTML;
         }
-        $html .= "</div></div>";
 
         return $html;
     }
