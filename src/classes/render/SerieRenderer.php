@@ -13,13 +13,12 @@ class SerieRenderer
         $stmt = NetVODRepo::getInstance()->getPDO()->prepare("SELECT avg(note) FROM commentaire INNER JOIN episode ON episode.id_ep = commentaire.id_ep
                                                                       INNER JOIN serie ON episode.id_serie = serie.id_serie
                                                                       WHERE serie.titre_serie = :titre");
-        $stmt->bindParam(':titre',$serie->titre);
+        $titre = $serie->__get('titre');
+        $stmt->bindParam(':titre',$titre);
         $stmt->execute();
-        if($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-            $note = $row['avg(note)'];
-        }else{
-            $note ='pas de note';
-        }
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $note = $row['avg(note)']=="" ? 'pas de note' : $row['avg(note)'];
+
         $titre = $serie->titre;
         $img =$serie->cheminImg;
 
