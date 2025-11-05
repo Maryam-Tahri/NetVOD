@@ -2,6 +2,8 @@
 
 namespace iutnc\netVOD\repository;
 
+use PDO;
+
 class DeefyRepository
 {
     private PDO $pdo;
