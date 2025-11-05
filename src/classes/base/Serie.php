@@ -37,4 +37,11 @@ class Serie
         $this->listeEpisodes[] = $episode;
     }
 
+    public function addEpisode(Episode $episode){
+        $this->listeEpisodes[] = $episode;
+    }
+
+
+
+
 }

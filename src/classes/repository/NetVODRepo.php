@@ -2,6 +2,7 @@
 
 namespace iutnc\netVOD\repository;
 use Exception;
+use iutnc\netVOD\base\Episode;
 use iutnc\netVOD\base\Serie;
 use PDO;
 
@@ -68,6 +69,58 @@ class NetVODRepo
         }
 
         return $series;
+    }
+
+    public  function getSerieById(int $idSerie): ?Serie
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM serie WHERE id_serie = ?");
+        $stmt->execute([$idSerie]);
+        $serie = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$serie) return null;
+
+        $episodes = $this->getEpisodeBySerieID($idSerie);
+
+        $s = new Serie(
+            $serie['titre'],
+            $serie['descriptif'],
+            $serie['annee'],
+            $serie['genre'],
+            $serie['public_vise'],
+            $serie['img'],
+        );
+
+        foreach ($episodes as $episode) {
+            $s->AddEpisode($episode);
+        }
+
+        return $s;
+
+
+    }
+
+
+    public function getEpisodeBySerieID(int $idSerie): array
+    {
+
+
+        $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_serie = ? ORDER BY num_episode ASC");
+        $stmt->execute([$idSerie]);
+        $episodesData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $episodes = [];
+        foreach ($episodesData as $ep) {
+            $episodes[] = new Episode(
+                $ep['num_episode'],
+                $ep['titre'],
+                $ep['resume'],
+                $ep['duree'],
+                $ep['chemin_img'],
+                $ep['chemin_video']
+            );
+        }
+
+        return $episodes;
     }
 
 }
