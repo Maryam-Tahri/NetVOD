@@ -1,6 +1,9 @@
 <?php
 
 namespace iutnc\netVOD\repository;
+use Exception;
+use iutnc\netVOD\base\Episode;
+use iutnc\netVOD\base\Serie;
 use PDO;
 
 class NetVODRepo
@@ -9,16 +12,18 @@ class NetVODRepo
     private static ?NetVODRepo $instance = null;
     private static array $config = [];
 
-    private function __construct(array $conf) {
+    private function __construct(array $conf)
+    {
         $this->pdo = new PDO($conf['dsn'], $conf['user'], $conf['pass'], [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]);
     }
 
-    public static function getInstance(): NetVODRepo {
+    public static function getInstance(): NetVODRepo
+    {
         if (self::$instance === null) {
             if (empty(self::$config)) {
-                throw new Exception("Configuration non définie ! Appelle d'abord DeefyRepository::setConfig().");
+                throw new Exception("Configuration non définie ! Appelle d'abord NetVODRepo::setConfig().");
             }
 
             self::$instance = new NetVODRepo(self::$config);
@@ -26,26 +31,105 @@ class NetVODRepo
         return self::$instance;
     }
 
-    public static function setConfig(string $file) {
+    public static function setConfig(string $file)
+    {
         $conf = parse_ini_file($file);
         if ($conf === false) {
             throw new Exception("Error reading configuration file");
         }
         $conf = parse_ini_file($file);
         $dsn = "{$conf['driver']}:host={$conf['host']};dbname={$conf['database']}";
-        self::$config = ['dsn'=> $dsn, 'user'=> $conf['username'], 'pass'=> $conf['password']];
+        self::$config = ['dsn' => $dsn, 'user' => $conf['username'], 'pass' => $conf['password']];
     }
 
-    public function getPDO(): PDO {
+    public function getPDO(): PDO
+    {
         return $this->pdo;
     }
 
-    public function SaveFavourite(int $id_user,int $_id_episode) {
+    public function SaveFavourite(int $id_user, int $_id_episode)
+    {
         $stmt = $this->pdo->prepare("SELECT id_liste FROM Liste WHERE id_user = :id_user AND type_liste='preference'");
+    }
+
+    public function getAllSeries(): array
+    {
+        $sql = "SELECT s.titre_serie, s.descriptif,s.annee,s.genre ,s.public_vise, s.img
+                FROM Serie s
+                ORDER BY s.titre_serie";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+
+        $series = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $series[] = new Serie(
+                $row['titre_serie'],
+                $row['descriptif'],
+                $row['annee'],
+                $row['genre'],
+                $row['public_vise'],
+                $row['img']
+            );
+        }
+
+        return $series;
+    }
+
+    public function getSerieById(int $idSerie): ?Serie
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM serie WHERE id_serie = ?");
+        $stmt->execute([$idSerie]);
+        $serie = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$serie) return null;
+
+        $episodes = $this->getEpisodeBySerieID($idSerie);
+
+        $s = new Serie(
+            $serie['titre'],
+            $serie['descriptif'],
+            $serie['annee'],
+            $serie['genre'],
+            $serie['public_vise'],
+            $serie['img'],
+        );
+
+        foreach ($episodes as $episode) {
+            $s->AddEpisode($episode);
+        }
+
+        return $s;
+
+
+    }
+
+
+    public function getEpisodeBySerieID(int $idSerie): array
+    {
+
+
+        $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_serie = ? ORDER BY num_episode ASC");
+        $stmt->execute([$idSerie]);
+        $episodesData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $episodes = [];
+        foreach ($episodesData as $ep) {
+            $episodes[] = new Episode(
+                $ep['num_episode'],
+                $ep['titre'],
+                $ep['resume'],
+                $ep['duree'],
+                $ep['chemin_img'],
+                $ep['chemin_video']
+            );
+        }
+
+        return $episodes;
         $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
         $stmt->execute();
         $id_liste = $stmt->fetch(PDO::FETCH_ASSOC);
-        $stmt =$this->pdo->prepare("INSERT INTO list2episode (id_liste, id_episode) VALUES(:id_lsite, :id_episode) ");
+        $stmt = $this->pdo->prepare("INSERT INTO list2episode (id_liste, id_episode) VALUES(:id_lsite, :id_episode) ");
         $stmt->bindParam(':id_user', $id_liste, PDO::PARAM_INT);
         $stmt->bindParam(':id_episode', $_id_episode, PDO::PARAM_INT);
         $stmt->execute();

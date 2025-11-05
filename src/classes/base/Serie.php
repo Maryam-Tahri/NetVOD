@@ -2,13 +2,15 @@
 
 namespace iutnc\netVOD\base;
 
+use Exception;
+
 class Serie
 {
     private String $titre;
     private String $descriptif;
     private int $annee;
-    private String $genre;
-    private String $public;
+    private ?String $genre;
+    private ?String $public;
     private String $cheminImg;
     private array $listeEpisodes;
 
@@ -28,13 +30,15 @@ class Serie
         if (property_exists($this, $nom)){
             return $this->$nom;
         }else{
-            return new \Exception("La variable $nom n'existe pas");
+            throw new Exception("La variable $nom n'existe pas");
         }
     }
 
     public function addEpisode(Episode $episode){
         $this->listeEpisodes[] = $episode;
     }
+
+
 
 
 }
