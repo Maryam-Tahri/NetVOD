@@ -15,7 +15,7 @@ class AjouterFavoris extends Action
         }
 
         // Vérifier que l'utilisateur est connecté
-        if (!isset($_SESSION['user_id'])) {
+        if (!isset($_SESSION['user']['id'])) {
             return "<div class='error'>Vous devez être connecté pour ajouter aux favoris</div>";
         }
 
@@ -29,7 +29,7 @@ class AjouterFavoris extends Action
         // Appeler la méthode SaveFavourite
         try {
             $repo = NetVODRepo::getInstance();
-            $repo->SaveFavourite($_SESSION['user_id'], $id_episode);
+            $repo->SaveFavourite($_SESSION['user']['id'], $id_episode);
 
             return "<div class='success'>Épisode ajouté aux favoris !</div>";
         } catch (Exception $e) {

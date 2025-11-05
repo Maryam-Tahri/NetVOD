@@ -30,27 +30,12 @@ class Dispatcher
                 break;
             case "catalogue":
                 $action = new AfficheCatalogue();
-            case "display-playlist":
-                $action = new DisplayPlaylistAction();
-                $this->renderPage($action->execute());
-                break;
-            case "add-playlist":
-                $action = new AddPlaylistAction();
-                $this->renderPage($action->execute());
-                break;
-            case "add-track":
-                $action = new AddTrackAction();
-                $this->renderPage($action->execute());
-                break;
-            case "add-podcast":
-                $action = new AddPodcastTrackAction();
                 $this->renderPage($action->execute());
                 break;
             case "add-user":
                 $action = new CreateUserAction();
                 $this->renderPage($action->execute());
                 break;
-
             case "signin":
                 $action = new SigninAction();
                 $this->renderPage($action->execute());
