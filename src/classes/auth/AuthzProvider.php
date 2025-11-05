@@ -14,14 +14,14 @@ class AuthzProvider
 
     public static function checkRole(int $role){
         $bdd = DeefyRepository::getInstance()->getPDO();
-        $stmt = $bdd->prepare("SELECT role FROM User WHERE id = :id");
+        $stmt = $bdd->prepare("SELECT role FROM Users WHERE id = :id");
         $stmt->bindValue(':id', $_SESSION['user']['id']);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row['role'] == $role;
     }
 
-    public static function checkPlaylistOwner(string $playlistId){ //TODO : Faire autorisation pour
+    public static function checkPlaylistOwner(string $playlistId){
         $bdd = DeefyRepository::getInstance()->getPDO();
         $stmt = $bdd->prepare("SELECT id_user FROM user2playlist WHERE id_pl = :id_pl");
         $stmt->bindValue(':id_pl', $playlistId);
