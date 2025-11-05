@@ -33,5 +33,8 @@ class Serie
             throw new Exception("La variable $nom n'existe pas");
         }
     }
+    public function addEpisode(Episode $episode){
+        $this->listeEpisodes[] = $episode;
+    }
 
 }
