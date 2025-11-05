@@ -14,7 +14,7 @@ class AuthzProvider
 
     public static function checkRole(int $role){
         $bdd = DeefyRepository::getInstance()->getPDO();
-        $stmt = $bdd->prepare("SELECT role FROM User WHERE id = :id");
+        $stmt = $bdd->prepare("SELECT role FROM Users WHERE id = :id");
         $stmt->bindValue(':id', $_SESSION['user']['id']);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);

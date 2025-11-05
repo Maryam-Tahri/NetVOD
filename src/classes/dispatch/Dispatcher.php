@@ -9,7 +9,7 @@ use iutnc\netVOD\action\AfficheCatalogue;
 use iutnc\netVOD\action\DefaultAction;
 use iutnc\netVOD\action\DeleteTrackAction;
 use iutnc\netVOD\action\DisplayPlaylistAction;
-use iutnc\netVOD\action\AddUserAction;
+use iutnc\netVOD\action\CreateUserAction;
 use iutnc\netVOD\action\logoutAction;
 use iutnc\netVOD\action\signinAction;
 use iutnc\netVOD\action\AjouterFavoris;
@@ -30,6 +30,24 @@ class Dispatcher
                 break;
             case "catalogue":
                 $action = new AfficheCatalogue();
+            case "display-playlist":
+                $action = new DisplayPlaylistAction();
+                $this->renderPage($action->execute());
+                break;
+            case "add-playlist":
+                $action = new AddPlaylistAction();
+                $this->renderPage($action->execute());
+                break;
+            case "add-track":
+                $action = new AddTrackAction();
+                $this->renderPage($action->execute());
+                break;
+            case "add-podcast":
+                $action = new AddPodcastTrackAction();
+                $this->renderPage($action->execute());
+                break;
+            case "add-user":
+                $action = new CreateUserAction();
                 $this->renderPage($action->execute());
                 break;
 
