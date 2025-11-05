@@ -21,7 +21,7 @@ class AuthzProvider
         return $row['role'] == $role;
     }
 
-    public static function checkPlaylistOwner(string $playlistId){
+    public static function checkPlaylistOwner(string $playlistId){ //TODO : Faire autorisation pour
         $bdd = DeefyRepository::getInstance()->getPDO();
         $stmt = $bdd->prepare("SELECT id_user FROM user2playlist WHERE id_pl = :id_pl");
         $stmt->bindValue(':id_pl', $playlistId);

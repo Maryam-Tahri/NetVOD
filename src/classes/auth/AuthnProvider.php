@@ -9,7 +9,7 @@ class AuthnProvider {
     public static function signin(string $email,
                                   string $passwd2check): bool {
         $bdd = DeefyRepository::getInstance()->getPDO();
-        $user = $bdd->prepare("SELECT id,passwd FROM User WHERE email = ?");
+        $user = $bdd->prepare("SELECT id, passwd FROM Users WHERE email = ?");
         $user->bindParam(1, $email);
         $user->execute();
         $row = $user->fetch();
@@ -27,9 +27,9 @@ class AuthnProvider {
         return true;
     }
 
-    public static function register(string $email,string $passwd): bool {
+    public static function register(string $email,string $passwd): int {
         $bdd = DeefyRepository::getInstance()->getPDO();
-        $user = $bdd->prepare("SELECT email FROM User WHERE email = ?");
+        $user = $bdd->prepare("SELECT email FROM Users WHERE email = ?");
         $user->bindParam(1, $email);
         $user->execute();
         $row = $user->fetch();
@@ -40,16 +40,32 @@ class AuthnProvider {
         $special = preg_match("#[\W]#", $passwd); // au moins un car. spécial
         $lower = preg_match("#[a-z]#", $passwd); // au moins une minuscule
         $upper = preg_match("#[A-Z]#", $passwd); // au moins une majuscule
-        if (!$digit ||!$special||!$lower||!$upper||strlen($passwd) < 10) {
-            return false;
+        if ($digit) {
+            if($special) {
+                if ($lower) {
+                    if ($upper) {
+                        if (strlen($passwd) < 10) {
+                            throw new AuthException("Mot de passe minimum 10 minimum");
+                        } else {
+                            $hashed = password_hash($passwd, PASSWORD_DEFAULT, ['cost' => 12]);
+                            $user = $bdd->prepare("INSERT INTO Users (email, passwd, role) VALUES (?, ?, 1)");
+                            $user->bindParam(1, $email);
+                            $user->bindParam(2, $hashed);
+                            $user->execute();
+                            return (int)$user->pdo->lastInsertId();
+                        }
+                    } else {
+                        throw new AuthException("Pas de Majuscule");
+                    }
+                } else {
+                    throw new AuthException("Pas de miniscule");
+                }
+            } else {
+                throw new AuthException("Pas de charactère special");
+            }
+        } else {
+            throw new AuthException("Pas de chiffre");
         }
-        $hashed = password_hash($passwd, PASSWORD_DEFAULT, ['cost' => 12]);
-        $user = $bdd->prepare("INSERT INTO User (email, passwd,role) VALUES (?, ?,1)");
-        $user->bindParam(1, $email);
-        $user->bindParam(2, $hashed);
-        $user->execute();
-        return true;
-
     }
 
     public static function getSignedInUser(){
