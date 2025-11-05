@@ -8,7 +8,7 @@ use iutnc\netVOD\action\AddTrackAction;
 use iutnc\netVOD\action\DefaultAction;
 use iutnc\netVOD\action\DeleteTrackAction;
 use iutnc\netVOD\action\DisplayPlaylistAction;
-use iutnc\netVOD\action\AddUserAction;
+use iutnc\netVOD\action\CreateUserAction;
 use iutnc\netVOD\action\logoutAction;
 use iutnc\netVOD\action\signinAction;
 
@@ -43,7 +43,7 @@ class Dispatcher
                 $this->renderPage($action->execute());
                 break;
             case "add-user":
-                $action = new AddUserAction();
+                $action = new CreateUserAction();
                 $this->renderPage($action->execute());
                 break;
             case "signin":
