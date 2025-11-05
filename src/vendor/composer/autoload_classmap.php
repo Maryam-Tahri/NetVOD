@@ -7,21 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
-    'Psr\\Log\\AbstractLogger' => $vendorDir . '/psr/log/src/AbstractLogger.php',
-    'Psr\\Log\\InvalidArgumentException' => $vendorDir . '/psr/log/src/InvalidArgumentException.php',
-    'Psr\\Log\\LogLevel' => $vendorDir . '/psr/log/src/LogLevel.php',
-    'Psr\\Log\\LoggerAwareInterface' => $vendorDir . '/psr/log/src/LoggerAwareInterface.php',
-    'Psr\\Log\\LoggerAwareTrait' => $vendorDir . '/psr/log/src/LoggerAwareTrait.php',
-    'Psr\\Log\\LoggerInterface' => $vendorDir . '/psr/log/src/LoggerInterface.php',
-    'Psr\\Log\\LoggerTrait' => $vendorDir . '/psr/log/src/LoggerTrait.php',
-    'Psr\\Log\\NullLogger' => $vendorDir . '/psr/log/src/NullLogger.php',
-    'iutnc\\netVOD\\action\\Action' => $baseDir . '/classes/action/Action.php',
-    'iutnc\\netVOD\\action\\DefaultAction' => $baseDir . '/classes/action/DefaultAction.php',
-    'iutnc\\netVOD\\action\\LogoutAction' => $baseDir . '/classes/action/LogoutAction.php',
-    'iutnc\\netVOD\\action\\SigninAction' => $baseDir . '/classes/action/SigninAction.php',
-    'iutnc\\netVOD\\auth\\AuthnProvider' => $baseDir . '/classes/auth/AuthnProvider.php',
-    'iutnc\\netVOD\\auth\\AuthzProvider' => $baseDir . '/classes/auth/AuthzProvider.php',
-    'iutnc\\netVOD\\dispatch\\Dispatcher' => $baseDir . '/classes/dispatch/Dispatcher.php',
-    'iutnc\\netVOD\\exception\\AuthException' => $baseDir . '/classes/exception/AuthException.php',
-    'iutnc\\netVOD\\repository\\NetVODRepo' => $baseDir . '/classes/repository/NetVODRepo.php',
 );

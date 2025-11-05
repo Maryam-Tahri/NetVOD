@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'iutnc\\netVOD\\' => array($baseDir . '/classes'),
-    'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
 );

@@ -11,10 +11,6 @@ class ComposerStaticInit3c7b1acfe9caf3e9c950f5161b581729
         array (
             'iutnc\\netVOD\\' => 13,
         ),
-        'P' => 
-        array (
-            'Psr\\Log\\' => 8,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -22,31 +18,10 @@ class ComposerStaticInit3c7b1acfe9caf3e9c950f5161b581729
         array (
             0 => __DIR__ . '/../..' . '/classes',
         ),
-        'Psr\\Log\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/log/src',
-        ),
     );
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Psr\\Log\\AbstractLogger' => __DIR__ . '/..' . '/psr/log/src/AbstractLogger.php',
-        'Psr\\Log\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/log/src/InvalidArgumentException.php',
-        'Psr\\Log\\LogLevel' => __DIR__ . '/..' . '/psr/log/src/LogLevel.php',
-        'Psr\\Log\\LoggerAwareInterface' => __DIR__ . '/..' . '/psr/log/src/LoggerAwareInterface.php',
-        'Psr\\Log\\LoggerAwareTrait' => __DIR__ . '/..' . '/psr/log/src/LoggerAwareTrait.php',
-        'Psr\\Log\\LoggerInterface' => __DIR__ . '/..' . '/psr/log/src/LoggerInterface.php',
-        'Psr\\Log\\LoggerTrait' => __DIR__ . '/..' . '/psr/log/src/LoggerTrait.php',
-        'Psr\\Log\\NullLogger' => __DIR__ . '/..' . '/psr/log/src/NullLogger.php',
-        'iutnc\\netVOD\\action\\Action' => __DIR__ . '/../..' . '/classes/action/Action.php',
-        'iutnc\\netVOD\\action\\DefaultAction' => __DIR__ . '/../..' . '/classes/action/DefaultAction.php',
-        'iutnc\\netVOD\\action\\LogoutAction' => __DIR__ . '/../..' . '/classes/action/LogoutAction.php',
-        'iutnc\\netVOD\\action\\SigninAction' => __DIR__ . '/../..' . '/classes/action/SigninAction.php',
-        'iutnc\\netVOD\\auth\\AuthnProvider' => __DIR__ . '/../..' . '/classes/auth/AuthnProvider.php',
-        'iutnc\\netVOD\\auth\\AuthzProvider' => __DIR__ . '/../..' . '/classes/auth/AuthzProvider.php',
-        'iutnc\\netVOD\\dispatch\\Dispatcher' => __DIR__ . '/../..' . '/classes/dispatch/Dispatcher.php',
-        'iutnc\\netVOD\\exception\\AuthException' => __DIR__ . '/../..' . '/classes/exception/AuthException.php',
-        'iutnc\\netVOD\\repository\\NetVODRepo' => __DIR__ . '/../..' . '/classes/repository/NetVODRepo.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
