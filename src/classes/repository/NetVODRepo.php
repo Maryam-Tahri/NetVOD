@@ -50,15 +50,17 @@ class NetVODRepo
     public function getAllSeries(?string $search = null, string $sort = 'titre_serie'): array
     {
         $params = [];
-        $query = "SELECT * FROM serie";
+        $query = "SELECT s.*, 
+                     (SELECT COUNT(*) FROM episode e WHERE e.id_serie = s.id_serie) AS nb_episodes
+              FROM serie s";
 
-        // --- Filtre de recherche ---
+        //Partie avec les recherches manuelle
         if (!empty($search)) {
-            $query .= " WHERE titre_serie LIKE :search OR descriptif LIKE :search";
+            $query .= " WHERE titre_serie LIKE :search ";
             $params[':search'] = "%$search%";
         }
 
-        // --- Tri ---
+        //Partie avec le trie façon filtre
         switch ($sort) {
             case 'date_ajout':
                 $query .= " ORDER BY date_ajout DESC";
@@ -71,6 +73,7 @@ class NetVODRepo
                 break;
         }
 
+        //Partie lancement de requete
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($params);
 
