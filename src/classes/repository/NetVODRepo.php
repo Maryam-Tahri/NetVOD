@@ -12,15 +12,13 @@ class NetVODRepo
     private static ?NetVODRepo $instance = null;
     private static array $config = [];
 
-    private function __construct(array $conf)
-    {
+    private function __construct(array $conf) {
         $this->pdo = new PDO($conf['dsn'], $conf['user'], $conf['pass'], [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]);
     }
 
-    public static function getInstance(): NetVODRepo
-    {
+    public static function getInstance(): NetVODRepo {
         if (self::$instance === null) {
             if (empty(self::$config)) {
                 throw new Exception("Configuration non définie ! Appelle d'abord NetVODRepo::setConfig().");
@@ -86,7 +84,7 @@ class NetVODRepo
 
     public function getAllSeries(): array
     {
-        $sql = "SELECT s.titre_serie, s.descriptif, s.annee, s.genre, s.public_vise, s.img
+        $sql = "SELECT *
                 FROM Serie s
                 ORDER BY s.titre_serie";
 
@@ -96,6 +94,7 @@ class NetVODRepo
         $series = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $series[] = new Serie(
+                $row['id_serie'],
                 $row['titre_serie'],
                 $row['descriptif'],
                 $row['annee'],
@@ -119,6 +118,7 @@ class NetVODRepo
         $episodes = $this->getEpisodeBySerieID($idSerie);
 
         $s = new Serie(
+            $serie['id_serie'],
             $serie['titre_serie'],
             $serie['descriptif'],
             $serie['annee'],
@@ -132,28 +132,51 @@ class NetVODRepo
         }
 
         return $s;
+
+
     }
+
 
     public function getEpisodeBySerieID(int $idSerie): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_serie = ? ORDER BY num_episode ASC");
+
+
+        $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_serie = ? ORDER BY numero ASC");
         $stmt->execute([$idSerie]);
         $episodesData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $episodes = [];
         foreach ($episodesData as $ep) {
             $episodes[] = new Episode(
-                $ep['num_episode'],
-                $ep['titre'],
-                $ep['resume'],
+                $ep['numero'],
+                $ep['titre_ep'],
+                $ep['resume_ep'],
                 $ep['duree'],
-                $ep['chemin_img'],
-                $ep['chemin_video']
+                $ep['img'],
+                $ep['file']
             );
         }
 
         return $episodes;
     }
 
+    public function getEpisodeById(int $idEpisode): ?Episode
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_ep = ?");
+        $stmt->execute([$idEpisode]);
+        $ep = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$ep) return null;
+
+        return new Episode(
+            $ep['numero'],
+            $ep['titre_ep'],
+            $ep['resume_ep'],
+            $ep['duree'],
+            $ep['img'],
+            $ep['file']
+        );
+    }
 
 }
