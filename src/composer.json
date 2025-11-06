@@ -6,5 +6,8 @@
     "psr-4": {
       "iutnc\\netVOD\\" : "classes/"
     }
+  },
+  "require": {
+    "ext-pdo": "*"
   }
 }

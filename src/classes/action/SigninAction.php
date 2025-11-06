@@ -22,9 +22,6 @@ HTML;
             }
             $html = "<h2>Connexion</h2>
                 <form method='post' action='?action=signin'>
-                    <label for='NomUser'>Nom d'utilisateur :</label><br>
-                    <input type='text' name='NomUser' id='NomUser' required><br><br>
-                    
                     <label for='email'>Email :</label><br>
                     <input type='text' name='email' id='email' required><br><br>
 
@@ -40,7 +37,6 @@ HTML;
             if (!isset($_SESSION['try'])){
                 $_SESSION['try'] = 0;
             }
-            $nomUser = $_POST['NomUser'];
             $email = filter_var($_POST['email'],FILTER_VALIDATE_EMAIL);
             $pswd = filter_var($_POST['mdp'],FILTER_SANITIZE_STRING);
             try{
@@ -48,7 +44,7 @@ HTML;
             }catch (AuthException $e){
                 if ($_SESSION['try'] < 3){
                     $html= <<<HTML
-                    <div>Email et/ou mot de passe incorrect !</div>
+                    <div><p class="incorrect">Email et/ou mot de passe incorrect !</p></div>
                     HTML;
                     $_SESSION['try']+=1;
                 }else{
@@ -65,7 +61,7 @@ HTML;
                     closedir($dossier);
                     $i = rand(0,count($imgs)-1);
                     $html = <<<HTML
-                            <div>Hop, t'es ban, à dans 5 minutes</div>
+                            <div><p>Hop, t'es ban, à dans 5 minutes</p></div>
                             <img src='$nom_dossier/$imgs[$i]'>
                             HTML;
                     $_SESSION['TOed'][$_SERVER['REMOTE_ADDR']] = time()+(5*60);
@@ -75,12 +71,12 @@ HTML;
             }
             unset($_SESSION['try']);
             $html =<<<HTML
-                    <div>Vous êtes bien connecté !</div>
+                    <div class="correct"><p>Vous êtes bien connecté !</p></div>
                 HTML;
             return $html;
         }
 
-        return "<p>Méthode HTTP non supportée.</p>";
+        return "<p class='error'>Méthode HTTP non supportée.</p>";
     }
 
 }
