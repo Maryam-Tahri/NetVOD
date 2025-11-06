@@ -10,6 +10,7 @@ use iutnc\netVOD\action\AfficheEpisode;
 use iutnc\netVOD\action\AfficheSerie;
 use iutnc\netVOD\action\DefaultAction;
 use iutnc\netVOD\action\DeleteTrackAction;
+use iutnc\netVOD\action\DisplayEpisodeAction;
 use iutnc\netVOD\action\DisplayPlaylistAction;
 use iutnc\netVOD\action\CreateUserAction;
 use iutnc\netVOD\action\logoutAction;
@@ -51,6 +52,10 @@ class Dispatcher
                 break;
             case "episode":
                 $action = new AfficheEpisode();
+                $this->renderPage($action->execute());
+                break;
+            case "display-episode":
+                $action = new DisplayEpisodeAction();
                 $this->renderPage($action->execute());
                 break;
             default:

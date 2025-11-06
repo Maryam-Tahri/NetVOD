@@ -17,7 +17,7 @@ HTML;
         if (isset($_GET['watch'])) {
             $stmt = NetVODRepo::getInstance()->getPDO();
             $stmt = $stmt->prepare("SELECT numero,titre_ep,resume_ep,duree,img,file FROM episode WHERE id_ep=?");
-            $stmt->bindParam("i", $_GET['watch']);
+            $stmt->bindParam(1, $_GET['watch']);
             $stmt->execute();
             if ($result = $stmt->fetch()) {
                 return <<<HTML

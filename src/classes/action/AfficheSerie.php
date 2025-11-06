@@ -20,6 +20,7 @@ class AfficheSerie extends Action
         if ($serie === null) {
             return "<p>Erreur : série introuvable.</p>";
         }
+        $_SESSION['serie'] = serialize($serie);
 
         $renderer = new SerieRenderer();
         $html = '<div class="serie-detail-container">';
