@@ -7,6 +7,7 @@ use iutnc\netVOD\action\Action;
 use iutnc\netVOD\auth\AuthnProvider;
 use iutnc\netVOD\exception\AuthException;
 use iutnc\netVOD\repository\NetVODRepo;
+use PDOException;
 
 class CreateUserAction extends Action
 {
@@ -42,7 +43,21 @@ class CreateUserAction extends Action
 
         try {
             $id = AuthnProvider::register($email, $passwd);
-            AuthnProvider::signin($email, $passwd);
+
+            // Creation du token pour valider l'email
+            try {
+                // $token = password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT); // Pas besoin
+                $token = bin2hex(random_bytes(16));
+
+                $expiration = date('Y-m-d H:i:s', time() + 300); // 5 Minutes
+
+                $pdo = NetVODRepo::getInstance()->getPDO();
+                $stmt = $pdo->prepare("INSERT INTO tokens (token, id_user, expiration_token) VALUES (?, ?, ?)");
+                $stmt->execute([$token, $id, $expiration]);
+            } catch (Exception $e) {
+                return $e->getMessage() . "<br><p class='fail'>❌ <b>Impossible</b> d'initialiser un <b>token</b> pour valider votre <b>email</b>.</p><br>
+                                           <a href='?action=default' class='btn btn-home'>Retour a l'accueil</a>";
+            }
 
             // Création des trois listes vide associer à l'utilisateur
             try {
@@ -57,14 +72,17 @@ class CreateUserAction extends Action
                                            <a href='?action=default' class='btn btn-home'>Retour a l'accueil</a>";
             }
 
-            return "<p>✅ Inscription réussie (ID $id) 🎉. Vous êtes maintenant connecté 👍.</p>
-                    <a href='?action=default' class='btn btn-blue'>Retour à l'accueil</a>";
+            return "<a href='?action=activate-account&token=$token'  class='btn btn-confirm'>Activer votre compte</a><p>Attention, valable que 5 minutes.</p>";
         } catch (AuthException $e) {
             $_SESSION['form_data_tmp'] = [
                 'username' => $_POST['username'] ?? '',
                 'email' => $_POST['email'] ?? ''
             ];
-            return "<p>❌ " . htmlspecialchars($e->getMessage()) . " ❌</p><a href='?action=add-user' class='btn btn-retry'>Réessayer</a>";
+            $toShow = "<p>❌ " . htmlspecialchars($e->getMessage()) . " ❌</p>";
+            if (strpos($e->getMessage(), "email"))
+                $toShow .= "<a href='?action=signin' class='btn btn-signin'>Se connecter</a><br>";
+            $toShow .= "<a href='?action=add-user' class='btn btn-retry'>Réessayer</a>";
+            return $toShow;
         }
     }
 }
