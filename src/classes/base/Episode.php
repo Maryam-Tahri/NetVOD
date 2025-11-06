@@ -12,8 +12,10 @@ class Episode
     private int $duree;
     private ?String $cheminImg;
     private String $chemin;
+    private int $id_ep;
 
-    public function __construct(int $numEpisode, string $titre, string $resume, int $duree, ?String $cheminImg, $chemin){
+    public function __construct(int $id_ep,int $numEpisode, string $titre, string $resume, int $duree, ?String $cheminImg, $chemin){
+        $this->id_ep = $id_ep;
         $this->numEpisode = $numEpisode;
         $this->titre = $titre;
         $this->resume = $resume;

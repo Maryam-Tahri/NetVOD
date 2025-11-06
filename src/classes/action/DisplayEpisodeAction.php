@@ -15,24 +15,45 @@ class DisplayEpisodeAction extends Action
 HTML;
         }
         if (isset($_GET['watch'])) {
-            $stmt = NetVODRepo::getInstance()->getPDO();
-            $stmt = $stmt->prepare("SELECT numero,titre_ep,resume_ep,duree,img,file FROM episode WHERE id_ep=?");
-            $stmt->bindParam(1, $_GET['watch']);
-            $stmt->execute();
-            if ($result = $stmt->fetch()) {
+            $serie = unserialize($_SESSION['serie']);
+            $ep = $_GET['watch']-1;
+            if (isset($serie->listeEpisodes[$ep])) {
+                $preced=<<<HTML
+<button>Pas d'épisode précédent</button>
+HTML;
+                $suivant=<<<HTML
+<button>Pas d'épisode suivant</button>
+HTML;
+                $episode=$serie->listeEpisodes[$ep];
+
+                if(isset($serie->listeEpisodes[$ep-1])){
+                    $eppre=$_GET['watch']-1;
+                    $preced = <<<HTML
+                    <a href="?action=display-episode&watch={$eppre}"><button>episode précedent</button></a>
+                    HTML;
+                }
+                if(isset($serie->listeEpisodes[$ep+1])){
+                    $eppro=$_GET['watch']+1;
+                    $suivant = <<<HTML
+                    <a href="?action=display-episode&watch={$eppro}"><button >episode Suivant</button></a>
+                    HTML;
+                }
                 return <<<HTML
                 <div class="player">
                   <video
                     controls
                     preload="metadata"
-                    poster="{$result['img']}"
-                    src="{$result['file']}">
+                    poster="{$episode->cheminImg}"
+                    src="{$episode->chemin}">
                   </video>
                 </div>
+                {$preced}
+                {$suivant}
                 <div>
-                <h2>Episode {$result['numero']} - {$result['titre_ep']} ( {$result['duree']} min) </h2>
-                <p>{$result['resume_ep']}</p>
-                <a href="?action=add-favourite&id={$_GET['watch']}">ajouter au favoris</a>
+                <h2>Episode {$episode->numEpisode} - {$episode->titre} ( {$episode->duree} min) </h2>
+                <p>{$episode->resume}</p>
+                
+                <a href="?action=add-favourite&id={$episode->id_ep}">ajouter au favoris</a>
                 </div>
                 HTML;
             } else {

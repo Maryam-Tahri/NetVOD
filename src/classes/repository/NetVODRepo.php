@@ -142,6 +142,7 @@ class NetVODRepo
         $episodes = [];
         foreach ($episodesData as $ep) {
             $episodes[$ep['numero']] = new Episode(
+                $ep['id_ep'],
                 $ep['numero'],
                 $ep['titre_ep'],
                 $ep['resume_ep'],
@@ -163,6 +164,7 @@ class NetVODRepo
         if (!$ep) return null;
 
         return new Episode(
+            $ep['id_ep'],
             $ep['numero'],
             $ep['titre_ep'],
             $ep['resume_ep'],

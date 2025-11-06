@@ -33,7 +33,7 @@ HTML;
         $html .= "<img src='{$episode->cheminImg}' alt='Image de l’épisode'>";
         $html .= "<p><strong>Résumé :</strong> {$episode->resume}</p>";
         $html .= "<p><strong>Durée :</strong> {$episode->duree} min</p>";
-        $html .= "<a href='?action=display-episode&watch={$idEpisode}' class='btn-watch'> Regarder</a>";
+        $html .= "<a href='?action=display-episode&watch={$episode->id_ep}' class='btn-watch'> Regarder</a>";
         $html .= "</div>";
 
         return $html;
