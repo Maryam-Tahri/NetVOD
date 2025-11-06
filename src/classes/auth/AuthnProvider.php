@@ -9,23 +9,28 @@ class AuthnProvider {
     public static function signin(string $email,
                                   string $passwd2check): bool {
         $bdd = NetVODRepo::getInstance()->getPDO();
-        $user = $bdd->prepare("SELECT id_user, password, role FROM Users WHERE email = ?");
+        $user = $bdd->prepare("SELECT id_user, password, role, is_active FROM Users WHERE email = ?");
         $user->bindParam(1, $email);
         $user->execute();
         $row = $user->fetch();
-        if (isset($row['password'])) {
-            if (!password_verify($passwd2check, $row['password'])) {
+
+        if (!$row['is_active']) {
+            throw new AuthException("Auth error : Votre compte n'est pas activé avec l'email " . $email);
+        } else {
+            if (isset($row['password'])) {
+                if (!password_verify($passwd2check, $row['password'])) {
+                    throw new AuthException("Auth error : invalid credentials");
+                }
+            }else{
                 throw new AuthException("Auth error : invalid credentials");
             }
-        }else{
-            throw new AuthException("Auth error : invalid credentials");
+            $_SESSION['user'] = [
+                'id' => $row['id_user'],
+                'email' => $email,
+                'role' => $row['role']
+            ];
+            return true;
         }
-        $_SESSION['user'] = [
-            'id' => $row['id_user'],
-            'email' => $email,
-            'role' => $row['role']
-        ];
-        return true;
     }
 
     public static function register(string $email,string $passwd): int {
@@ -50,12 +55,9 @@ class AuthnProvider {
                             } else {
                                 $hashed = password_hash($passwd, PASSWORD_DEFAULT, ['cost' => 12]);
                                 $user = $bdd->prepare("INSERT INTO Users (email, password, role) VALUES (?, ?, 1)");
-                                $user->bindParam(1, $email);
-                                $user->bindParam(2, $hashed);
                                 // TODO : Ajouter le nom d'utilisateur a la base de donnée
-                                $user->execute();
+                                $user->execute([$email, $hashed]);
                                 return (int)$bdd->lastInsertId();
-
                             }
                         } else {
                             throw new AuthException("Pas de Majuscule");
