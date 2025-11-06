@@ -50,7 +50,6 @@ class Dispatcher
                 $action = new AjouterFavoris();
                 $this->renderPage($action->execute());
                 break;
-
             case "serie":
                 $action = new AfficheSerie();
                 $this->renderPage($action->execute());
@@ -83,7 +82,7 @@ HTML;
         <html lang="fr">
         <head>
             <meta charset="UTF-8">
-            <title>Deefy</title>
+            <title>NetVOD</title>
             <link rel='stylesheet' href='../css/style.css'>
         </head>
         <body>

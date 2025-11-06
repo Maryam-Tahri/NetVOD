@@ -5,7 +5,13 @@ namespace iutnc\netVOD\action;
 class DefaultAction extends Action
 {
     public  function execute(): String {
-        return "<h2> Bienvenue sur la page </h2>";
+        $html = "<h2> Bienvenue sur la page </h2>";
+        if (!isset($_SESSION['user']['id'])) {
+
+        }
+        return $html;
     }
+
+
 
 }
