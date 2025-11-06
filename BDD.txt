@@ -57,6 +57,14 @@ CREATE TABLE Commentaire (
     FOREIGN KEY (id_ep) REFERENCES Episode(id_ep) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+CREATE TABLE list2serie (
+    id_liste INT NOT NULL,
+    id_serie INT NOT NULL,
+    PRIMARY KEY (id_liste, id_serie),
+    FOREIGN KEY (id_liste) REFERENCES Liste(id_liste) ON DELETE CASCADE,
+    FOREIGN KEY (id_serie) REFERENCES Serie(id_serie) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 INSERT INTO episode (id_ep, numero, titre_ep, resume_ep, duree, file, id_serie) VALUES
 (1, 1, 'Le lac', 'Le lac se révolte', 8, 'lake.mp4', 1),
 (2, 2, 'Le lac : les mystères de l\'eau trouble', 'Un grand mystère, l\'eau du lac est trouble. Jack trouvera-t-il la solution ?', 8, 'lake.mp4', 1),
