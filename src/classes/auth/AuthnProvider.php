@@ -15,7 +15,7 @@ class AuthnProvider {
         $row = $user->fetch();
 
         if (!$row['is_active']) {
-            throw new AuthException("Auth error : Votre compte n'est pas activé avec l'email " . $email);
+            throw new AuthException("Auth error : Votre compte n'est pas activé avec l'email " . $email, 1);
         } else {
             if (isset($row['password'])) {
                 if (!password_verify($passwd2check, $row['password'])) {
