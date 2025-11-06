@@ -14,6 +14,10 @@ class AuthnProvider {
         $user->execute();
         $row = $user->fetch();
 
+        if (!$row) {
+            throw new AuthException("Auth error : Aucun email correspondant");
+        }
+
         if (!$row['is_active']) {
             throw new AuthException("Auth error : Votre compte n'est pas activé avec l'email " . $email, 1);
         } else {
