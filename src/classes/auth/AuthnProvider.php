@@ -9,7 +9,7 @@ class AuthnProvider {
     public static function signin(string $email,
                                   string $passwd2check): bool {
         $bdd = NetVODRepo::getInstance()->getPDO();
-        $user = $bdd->prepare("SELECT id_user, password FROM Users WHERE email = ?");
+        $user = $bdd->prepare("SELECT id_user, password, role FROM Users WHERE email = ?");
         $user->bindParam(1, $email);
         $user->execute();
         $row = $user->fetch();
@@ -23,6 +23,7 @@ class AuthnProvider {
         $_SESSION['user'] = [
             'id' => $row['id_user'],
             'email' => $email,
+            'role' => $row['role']
         ];
         return true;
     }
