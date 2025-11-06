@@ -5,12 +5,10 @@ namespace iutnc\netVOD\auth;
 use iutnc\netVOD\repository\NetVODRepo;
 use iutnc\netVOD\exception\AuthException;
 
-class AuthnProvider {
-
-    public static function signin(string $email,
-                                  string $passwd2check): bool {
-        $bdd = NetVODRepo::getInstance()->getPDO();
-    public static function signin(string $email, string $passwd2check): bool {
+class AuthnProvider
+{
+    public static function signin(string $email, string $passwd2check): bool
+    {
         $bdd = NetVODRepo::getInstance()->getPDO();
         $user = $bdd->prepare("SELECT id_user, password FROM Users WHERE email = ?");
         $user->bindParam(1, $email);
@@ -33,9 +31,8 @@ class AuthnProvider {
         return true;
     }
 
-    public static function register(string $email,string $passwd): int {
-        $bdd = NetVODRepo::getInstance()->getPDO();
-    public static function register(string $email, string $passwd): int {
+    public static function register(string $email, string $passwd): int
+    {
         $bdd = NetVODRepo::getInstance()->getPDO();
 
         // Vérifie si l'email existe déjà
@@ -67,7 +64,7 @@ class AuthnProvider {
         $insert->bindParam(2, $hashed);
         $insert->execute();
 
-        // ✅ Création automatique d’une liste de favoris vide
+        // Création automatique d'une liste de favoris vide
         $id_user = (int)$bdd->lastInsertId();
         $liste = $bdd->prepare("INSERT INTO Liste (id_user, type_list) VALUES (?, 'preference')");
         $liste->bindParam(1, $id_user);
@@ -76,7 +73,8 @@ class AuthnProvider {
         return $id_user;
     }
 
-    public static function getSignedInUser() {
+    public static function getSignedInUser()
+    {
         if (isset($_SESSION['user'])) {
             return $_SESSION['user']['id'];
         } else {

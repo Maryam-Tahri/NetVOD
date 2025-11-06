@@ -6,6 +6,7 @@ use Exception;
 
 class Serie
 {
+
     private String $titre;
     private String $descriptif;
     private int $annee;

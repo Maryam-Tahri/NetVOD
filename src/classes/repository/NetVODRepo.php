@@ -119,7 +119,7 @@ class NetVODRepo
         $episodes = $this->getEpisodeBySerieID($idSerie);
 
         $s = new Serie(
-            $serie['titre'],
+            $serie['titre_serie'],
             $serie['descriptif'],
             $serie['annee'],
             $serie['genre'],

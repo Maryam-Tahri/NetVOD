@@ -64,6 +64,7 @@ class Dispatcher
 HTML;
         }else{
             $conn = <<<HTML
+            <a href="?action=catalogue">Afficher le catalogue</a>
             <a href='?action=logout'>se déconnecter</a>
            HTML;
         }

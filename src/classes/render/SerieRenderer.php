@@ -10,18 +10,18 @@ class SerieRenderer
     public function render(Serie $serie): string
     {
         $titre = $serie->titre;
-        $img =$serie->cheminImg;
+        $img = $serie->cheminImg;
 
         $html = <<<HTML
-        <div class="serie-card">
-            <img class="serie" src="$img" alt="$titre">
-            <h2>$titre</h2>
-            <form method='POST' action='?action=ajouter-favoris' style='display:inline;'>
-            <input type='hidden' name='id_episode' value='123'>
+    <div class="serie-card">
+        <img class="serie" src="$img" alt="$titre">
+        <h2>$titre</h2>
+        <form method='POST' action='?action=ajouter-favoris' style='display:inline;'>
+            <input type='hidden' name='id_serie' value=1>            
             <button type='submit'>Ajouter aux favoris</button>
-            </form>
-        </div>
-        HTML;
+        </form>
+    </div>
+    HTML;
 
         return $html;
     }
