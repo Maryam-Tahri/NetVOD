@@ -18,9 +18,7 @@ $dispatcher = new Dispatcher();
 
 $dispatcher->run();
 
-$test = new \iutnc\netVOD\base\Serie("joie", "que je doie", 2025, "comédie", "adulte", "img/joie.jpg");
-$renderer = new SerieRenderer();
-echo $renderer->render($test);
+
 
 
 

@@ -6,10 +6,12 @@ use iutnc\netVOD\action\AddPlaylistAction;
 use iutnc\netVOD\action\AddPodcastTrackAction;
 use iutnc\netVOD\action\AddTrackAction;
 use iutnc\netVOD\action\AfficheCatalogue;
+use iutnc\netVOD\action\AfficheEpisode;
+use iutnc\netVOD\action\AfficheSerie;
 use iutnc\netVOD\action\DefaultAction;
 use iutnc\netVOD\action\DeleteTrackAction;
 use iutnc\netVOD\action\DisplayPlaylistAction;
-use iutnc\netVOD\action\AddUserAction;
+use iutnc\netVOD\action\CreateUserAction;
 use iutnc\netVOD\action\logoutAction;
 use iutnc\netVOD\action\signinAction;
 
@@ -31,7 +33,10 @@ class Dispatcher
                 $action = new AfficheCatalogue();
                 $this->renderPage($action->execute());
                 break;
-
+            case "add-user":
+                $action = new CreateUserAction();
+                $this->renderPage($action->execute());
+                break;
             case "signin":
                 $action = new SigninAction();
                 $this->renderPage($action->execute());
@@ -40,7 +45,14 @@ class Dispatcher
                 $action = new LogoutAction();
                 $this->renderPage($action->execute());
                 break;
-
+            case "serie":
+                $action = new AfficheSerie();
+                $this->renderPage($action->execute());
+                break;
+            case "episode":
+                $action = new AfficheEpisode();
+                $this->renderPage($action->execute());
+                break;
             default:
                 $this->renderPage("pas d'action");
                 break;
@@ -75,10 +87,9 @@ HTML;
 
             <nav>
                 <a href="?action=default">Accueil</a>
+                <a href="?action=catalogue">Afficher le catalogue</a>
                 {$conn}
-                <a href="?action=display-playlist">Mes playlists</a>
-                <a href="?action=add-playlist">Créer une playlist</a>
-                <a href="?action=catalogue">Ajouter une piste</a>
+                
             </nav>
 
             <main>
