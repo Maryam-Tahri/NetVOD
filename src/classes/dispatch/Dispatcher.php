@@ -88,8 +88,8 @@ HTML;
         </head>
         <body>
             <header>
-                <h1>Deefy</h1>
-                <p>Votre espace personnel pour créer et écouter vos playlists</p>
+                <h1>NetVOD</h1>
+                <p>Votre espace personnel pour regarder les meilleures séries</p>
             </header>
 
             <nav>

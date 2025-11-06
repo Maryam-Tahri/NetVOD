@@ -35,7 +35,7 @@ class AjouterFavoris extends Action
                 return "<div class='error'>Cette série n'existe pas</div>";
             }
 
-            $getList = $bdd->prepare("SELECT id_list FROM Liste WHERE id_user = ? AND type_list = 'preference'");
+            $getList = $bdd->prepare("SELECT id_liste FROM Liste WHERE id_user = ? AND type_list = 'preference'");
             $getList->execute([$_SESSION['user']['id']]);
             $liste = $getList->fetch(\PDO::FETCH_ASSOC);
 
@@ -43,17 +43,17 @@ class AjouterFavoris extends Action
                 return "<div class='error'>Liste de favoris non trouvée</div>";
             }
 
-            $id_list = $liste['id_list'];
+            $id_list = $liste['id_liste'];
 
-            $checkExist = $bdd->prepare("SELECT * FROM list2serie WHERE id_list = ? AND id_serie = ?");
-            $checkExist->execute([$id_list, $id_serie]);
+            $checkExist = $bdd->prepare("SELECT * FROM list2episode WHERE id_liste = ? AND id_ep = ?");
+            $checkExist->execute([$id_list, ]);
 
             if ($checkExist->fetch()) {
                 return "<div class='error'>Cette série est déjà dans vos favoris</div>";
             }
 
-            $insert = $bdd->prepare("INSERT INTO list2serie (id_list, id_serie) VALUES (?, ?)");
-            $insert->execute([$id_list, $id_serie]);
+            $insert = $bdd->prepare("INSERT INTO Liste (id_liste) VALUES (?)");
+            $insert->execute([$id_list]);
 
             return "<div class='success'>Série \"" . htmlspecialchars($serie['titre_serie']) . "\" ajoutée aux favoris !</div>";
 
