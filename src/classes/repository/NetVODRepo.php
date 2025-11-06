@@ -47,19 +47,35 @@ class NetVODRepo
         $stmt = $this->pdo->prepare("SELECT id_liste FROM Liste WHERE id_user = :id_user AND type_liste='preference'");
     }
 
-    public function getAllSeries(?string $search = null): array
+    public function getAllSeries(?string $search = null, string $sort = 'titre_serie'): array
     {
-        if ($search) {
-            $sql = "SELECT * FROM Serie 
-                WHERE titre_serie LIKE :search 
-                ORDER BY titre_serie";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute(['search' => "%$search%"]);
-        } else {
-            $sql = "SELECT * FROM Serie ORDER BY titre_serie";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();
+        $params = [];
+        $query = "SELECT s.*, 
+                     (SELECT COUNT(*) FROM episode e WHERE e.id_serie = s.id_serie) AS nb_episodes
+              FROM serie s";
+
+        //Partie avec les recherches manuelle
+        if (!empty($search)) {
+            $query .= " WHERE titre_serie LIKE :search ";
+            $params[':search'] = "%$search%";
         }
+
+        //Partie avec le trie façon filtre
+        switch ($sort) {
+            case 'date_ajout':
+                $query .= " ORDER BY date_ajout DESC";
+                break;
+            case 'nb_episodes':
+                $query .= " ORDER BY nb_episodes DESC";
+                break;
+            default:
+                $query .= " ORDER BY titre_serie ASC";
+                break;
+        }
+
+        //Partie lancement de requete
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($params);
 
         $series = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -76,6 +92,7 @@ class NetVODRepo
 
         return $series;
     }
+
 
     public  function getSerieById(int $idSerie): ?Serie
     {

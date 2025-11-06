@@ -9,32 +9,31 @@ class AfficheCatalogue extends Action
 {
     public function execute(): string
     {
+        $repo = NetVODRepo::getInstance();
+
+        $searchValue = $_GET['search'] ?? '';
+        $sortValue = $_GET['sort'] ?? 'titre_serie';
+
+        $series = $repo->getAllSeries($searchValue, $sortValue);
+
         $html = '<div class="catalogue-container">';
         $html .= '<h1>Catalogue des séries</h1>';
 
-
-        $searchValue = $_GET['search'] ?? '';
         $html .= <<<HTML
-<form method="POST" action="?action=catalogue">
-    <input type="text" name="search" placeholder="Rechercher" value="$searchValue">
-    <button type="submit">Rechercher</button>
+<form method="GET" action="">
+    <input type="hidden" name="action" value="catalogue">
+    <input type="text" name="search" placeholder="Rechercher..." value="{$searchValue}">
+    <select name="sort">
+        <option value="titre_serie"  {($sortValue === 'titre_serie' : '') } >Titre</option>
+        <option value="date_ajout"   {($sortValue === "date_ajout": '')}>Date d’ajout</option>
+        <option value="nb_episodes"  {($sortValue=== 'nb_episodes' : '')}>Nombre d’épisodes</option>
+    </select>
+    <button type="submit">Rechercher / Trier</button>
 </form>
 HTML;
-
-        $repo = NetVODRepo::getInstance();
-
-
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $series = $repo->getAllSeries();
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $search = $_POST['search'] ?? '';
-            $series = $repo->getAllSeries($search);
-        }
-
+        
         if (empty($series)) {
-            $html .= '<p class="no-content">Aucune série disponible pour le moment.</p>';
+            $html .= '<p class="no-content">Aucune série trouvée.</p>';
         } else {
             $html .= '<div class="series-grid">';
             foreach ($series as $serie) {
@@ -45,7 +44,8 @@ HTML;
         }
 
         $html .= '</div>';
-
         return $html;
     }
+
+
 }
