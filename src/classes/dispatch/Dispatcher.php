@@ -87,6 +87,7 @@ HTML;
 
             <nav>
                 <a href="?action=default">Accueil</a>
+                <a href="?action=catalogue">Afficher le catalogue</a>
                 {$conn}
                 
             </nav>
