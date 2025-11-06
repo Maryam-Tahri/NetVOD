@@ -45,15 +45,15 @@ class AjouterFavoris extends Action
 
             $id_list = $liste['id_liste'];
 
-            $checkExist = $bdd->prepare("SELECT * FROM list2episode WHERE id_liste = ? AND id_ep = ?");
-            $checkExist->execute([$id_list, ]);
+            $checkExist = $bdd->prepare("SELECT * FROM list2serie WHERE id_liste = ? AND id_serie = ?");
+            $checkExist->execute([$id_list, $id_serie]);
 
             if ($checkExist->fetch()) {
                 return "<div class='error'>Cette série est déjà dans vos favoris</div>";
             }
 
-            $insert = $bdd->prepare("INSERT INTO Liste (id_liste) VALUES (?)");
-            $insert->execute([$id_list]);
+            $insert = $bdd->prepare("INSERT INTO list2serie (id_liste, id_serie) VALUES (?,?)");
+            $insert->execute([$id_list,$id_serie]);
 
             return "<div class='success'>Série \"" . htmlspecialchars($serie['titre_serie']) . "\" ajoutée aux favoris !</div>";
 
