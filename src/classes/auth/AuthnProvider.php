@@ -7,6 +7,9 @@ use iutnc\netVOD\exception\AuthException;
 
 class AuthnProvider {
 
+    public static function signin(string $email,
+                                  string $passwd2check): bool {
+        $bdd = NetVODRepo::getInstance()->getPDO();
     public static function signin(string $email, string $passwd2check): bool {
         $bdd = NetVODRepo::getInstance()->getPDO();
         $user = $bdd->prepare("SELECT id_user, password FROM Users WHERE email = ?");
@@ -30,6 +33,8 @@ class AuthnProvider {
         return true;
     }
 
+    public static function register(string $email,string $passwd): int {
+        $bdd = NetVODRepo::getInstance()->getPDO();
     public static function register(string $email, string $passwd): int {
         $bdd = NetVODRepo::getInstance()->getPDO();
 
