@@ -3,6 +3,7 @@
 namespace iutnc\netVOD\action;
 use iutnc\netVOD\auth\AuthnProvider;
 use iutnc\netVOD\exception\AuthException;
+use iutnc\netVOD\repository\NetVODRepo;
 
 class SigninAction
 {
@@ -43,7 +44,15 @@ HTML;
                 AuthnProvider::signin($email, $pswd);
             }catch (AuthException $e){
                 if ($_SESSION['try'] < 3){
-                    $html = "<p>❌ " . htmlspecialchars($e->getMessage()) . " ❌</p>";
+                    $html = "<p class='fail'>❌ " . htmlspecialchars($e->getMessage()) . " ❌</p>";
+                    if ($e->getTypeError() === 1) {
+                        $pdo = NetVODRepo::getInstance()->getPDO();
+                        $deleteUser = $pdo->prepare("DELETE FROM Users WHERE email = ?");
+                        $deleteUser->execute([$email]);
+                        $html .= "<a href='?action=add-user' class='btn'>Se réinscrire</a>";
+                    } else {
+                        $html .= "<a href='?action=signin' class='btn'>Se connecter</a>";
+                    }
 //                    $html .= <<<HTML
 //                    <div><p class="fail">Email et/ou mot de passe incorrect !</p></div>
 //                    HTML;
