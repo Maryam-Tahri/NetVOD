@@ -9,6 +9,12 @@ class AfficheEpisode extends Action
     public function execute(): string
     {
 
+        if (!isset($_SESSION["user"])) {
+            return <<<HTML
+<div>Merci de vous connecter pour avoir accès à toutes les fonctionnalités !</div>
+HTML;
+        }
+
         if (!isset($_GET['id'])) {
             return "<p>Erreur : aucun épisode sélectionné.</p>";
         }

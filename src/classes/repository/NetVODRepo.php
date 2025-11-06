@@ -82,14 +82,19 @@ class NetVODRepo
 
 
 
-    public function getAllSeries(): array
+    public function getAllSeries(?string $search = null): array
     {
-        $sql = "SELECT *
-                FROM Serie s
-                ORDER BY s.titre_serie";
-
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
+        if ($search) {
+            $sql = "SELECT * FROM Serie 
+                WHERE titre_serie LIKE :search 
+                ORDER BY titre_serie";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute(['search' => "%$search%"]);
+        } else {
+            $sql = "SELECT * FROM Serie ORDER BY titre_serie";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+        }
 
         $series = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
