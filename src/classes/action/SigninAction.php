@@ -43,9 +43,10 @@ HTML;
                 AuthnProvider::signin($email, $pswd);
             }catch (AuthException $e){
                 if ($_SESSION['try'] < 3){
-                    $html= <<<HTML
-                    <div><p class="incorrect">Email et/ou mot de passe incorrect !</p></div>
-                    HTML;
+                    $html = "<p>❌ " . htmlspecialchars($e->getMessage()) . " ❌</p>";
+//                    $html .= <<<HTML
+//                    <div><p class="fail">Email et/ou mot de passe incorrect !</p></div>
+//                    HTML;
                     $_SESSION['try']+=1;
                 }else{
                     $nom_dossier = '../img';
