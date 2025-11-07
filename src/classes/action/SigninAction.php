@@ -30,7 +30,7 @@ HTML;
                     <input type='password' name='mdp' id='mdp' required><br><br>               
 
                     <button type='submit'>Connexion</button>
-                </form>";
+                </form><a href='?action=reset-passwd-token' class='btn'>Mot de passe oublié ?</a>";
             return $html;
         }
 
