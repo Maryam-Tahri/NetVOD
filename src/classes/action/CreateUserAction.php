@@ -5,7 +5,9 @@ namespace iutnc\netVOD\action;
 use Exception;
 use iutnc\netVOD\action\Action;
 use iutnc\netVOD\auth\AuthnProvider;
+use iutnc\netVOD\base\TokenGiver;
 use iutnc\netVOD\exception\AuthException;
+use iutnc\netVOD\exception\TokenException;
 use iutnc\netVOD\repository\NetVODRepo;
 use PDOException;
 
@@ -46,14 +48,7 @@ class CreateUserAction extends Action
 
             // Creation du token pour valider l'email
             try {
-                // $token = password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT); // Pas besoin
-                $token = bin2hex(random_bytes(16));
-
-                $expiration = date('Y-m-d H:i:s', time() + 300); // 5 Minutes
-
-                $pdo = NetVODRepo::getInstance()->getPDO();
-                $stmt = $pdo->prepare("INSERT INTO tokens (token, id_user, expiration_token) VALUES (?, ?, ?)");
-                $stmt->execute([$token, $id, $expiration]);
+                $token = TokenGiver::createToken($id);
             } catch (Exception $e) {
                 return $e->getMessage() . "<br><p class='fail'>❌ <b>Impossible</b> d'initialiser un <b>token</b> pour valider votre <b>email</b>.</p><br>
                                            <a href='?action=default' class='btn btn-home'>Retour a l'accueil</a>";
