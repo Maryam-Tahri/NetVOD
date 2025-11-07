@@ -56,14 +56,14 @@ class NetVODRepo
 
         $whereAdded = false;
 
-        // Recherche (titre ou descriptif)
+        // Partie recherche perso
         if (!empty($search)) {
             $query .= " WHERE (s.titre_serie LIKE :search OR s.descriptif LIKE :search)";
             $params[':search'] = "%$search%";
             $whereAdded = true;
         }
 
-        // Filtrage par genre
+        // Partie filtre
         if (!empty($genre)) {
             $query .= $whereAdded ? " AND" : " WHERE";
             $query .= " s.genre = :genre";
@@ -71,7 +71,6 @@ class NetVODRepo
             $whereAdded = true;
         }
 
-        // Filtrage par public
         if (!empty($public)) {
             $query .= $whereAdded ? " AND" : " WHERE";
             $query .= " s.public_vise = :public";
@@ -79,7 +78,7 @@ class NetVODRepo
             $whereAdded = true;
         }
 
-        // Tri
+        // Partie Tri
         switch ($sort) {
             case 'date_ajout':
                 $query .= " ORDER BY s.date_ajout DESC";
@@ -92,9 +91,7 @@ class NetVODRepo
                 break;
         }
 
-        // Debug utile (tu peux le laisser le temps des tests)
-        // echo "<pre>$query</pre>";
-
+        //Partie execution
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($params);
 
