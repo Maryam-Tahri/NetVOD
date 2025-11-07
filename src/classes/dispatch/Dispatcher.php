@@ -14,6 +14,7 @@ use iutnc\netVOD\action\DeleteTrackAction;
 use iutnc\netVOD\action\DisplayPlaylistAction;
 use iutnc\netVOD\action\CreateUserAction;
 use iutnc\netVOD\action\logoutAction;
+use iutnc\netVOD\action\ResetPasswdTokenAction;
 use iutnc\netVOD\action\signinAction;
 
 class Dispatcher
@@ -56,6 +57,10 @@ class Dispatcher
                 break;
             case "activate-account":
                 $action = new ActivateAccountAction();
+                $this->renderPage($action->execute());
+                break;
+            case "reset-passwd-token":
+                $action = new ResetPasswdTokenAction();
                 $this->renderPage($action->execute());
                 break;
             default:
