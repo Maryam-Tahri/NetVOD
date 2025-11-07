@@ -47,7 +47,7 @@ class NetVODRepo
         $stmt = $this->pdo->prepare("SELECT id_liste FROM Liste WHERE id_user = :id_user AND type_liste='preference'");
     }
 
-    public function getAllSeries(?string $search = null, string $sort = 'titre_serie'): array
+    public function getAllSeries(?string $search = null, string $sort = 'titre_serie', string $genre = '', string $public = ''): array
     {
         $params = [];
         $query = "SELECT s.*, 
