@@ -47,44 +47,54 @@ class NetVODRepo
         $stmt = $this->pdo->prepare("SELECT id_liste FROM Liste WHERE id_user = :id_user AND type_liste='preference'");
     }
 
-    public function getAllSeries(?string $search = null, string $sort = 'titre_serie', string $genre = '', string $public = ''): array
+    public function getAllSeries(?string $search = null, string $sort = 'titre_serie', ?string $genre = null, ?string $public = null): array
     {
         $params = [];
         $query = "SELECT s.*, 
                      (SELECT COUNT(*) FROM episode e WHERE e.id_serie = s.id_serie) AS nb_episodes
               FROM serie s";
 
-        //Partie avec les recherches manuelle
+        $whereAdded = false;
+
+        // Recherche (titre ou descriptif)
         if (!empty($search)) {
-            $query .= " WHERE titre_serie LIKE :search ";
+            $query .= " WHERE (s.titre_serie LIKE :search OR s.descriptif LIKE :search)";
             $params[':search'] = "%$search%";
+            $whereAdded = true;
         }
 
-        // Partie filtre
+        // Filtrage par genre
         if (!empty($genre)) {
-            $query .= " AND genre = :genre";
+            $query .= $whereAdded ? " AND" : " WHERE";
+            $query .= " s.genre = :genre";
             $params[':genre'] = $genre;
+            $whereAdded = true;
         }
 
+        // Filtrage par public
         if (!empty($public)) {
-            $query .= " AND public = :public";
+            $query .= $whereAdded ? " AND" : " WHERE";
+            $query .= " s.public_vise = :public";
             $params[':public'] = $public;
+            $whereAdded = true;
         }
 
-        //Partie avec le trie façon filtre
+        // Tri
         switch ($sort) {
             case 'date_ajout':
-                $query .= " ORDER BY date_ajout DESC";
+                $query .= " ORDER BY s.date_ajout DESC";
                 break;
             case 'nb_episodes':
                 $query .= " ORDER BY nb_episodes DESC";
                 break;
             default:
-                $query .= " ORDER BY titre_serie ASC";
+                $query .= " ORDER BY s.titre_serie ASC";
                 break;
         }
 
-        //Partie lancement de requete
+        // Debug utile (tu peux le laisser le temps des tests)
+        // echo "<pre>$query</pre>";
+
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($params);
 
@@ -103,6 +113,8 @@ class NetVODRepo
 
         return $series;
     }
+
+
 
     public  function getSerieById(int $idSerie): ?Serie
     {
