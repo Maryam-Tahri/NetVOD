@@ -46,35 +46,51 @@ class AuthnProvider {
         if ($row && isset($row['email'])) {
             throw new AuthException("Auth error : email already exists");
         } else {
-            $digit = preg_match("#[\d]#", $passwd); // au moins un digit
-            $special = preg_match("#[\W]#", $passwd); // au moins un car. spécial
-            $lower = preg_match("#[a-z]#", $passwd); // au moins une minuscule
-            $upper = preg_match("#[A-Z]#", $passwd); // au moins une majuscule
-            if ($digit) {
-                if ($special) {
-                    if ($lower) {
-                        if ($upper) {
-                            if (strlen($passwd) < 10) {
-                                throw new AuthException("Mot de passe d'une longueur de 10 minimum");
-                            } else {
-                                $hashed = password_hash($passwd, PASSWORD_DEFAULT, ['cost' => 12]);
-                                $user = $bdd->prepare("INSERT INTO Users (email, password, role) VALUES (?, ?, 1)");
-                                // TODO : Ajouter le nom d'utilisateur a la base de donnée
-                                $user->execute([$email, $hashed]);
-                                return (int)$bdd->lastInsertId();
-                            }
+            try {
+                if (AuthnProvider::passwdVerify($passwd)) {
+                    $hashed = AuthnProvider::provideHashedPassword($passwd);
+                    $user = $bdd->prepare("INSERT INTO Users (email, password, role) VALUES (?, ?, 1)");
+                    // TODO : Ajouter le nom d'utilisateur a la base de donnée
+                    $user->execute([$email, $hashed]);
+                    return (int)$bdd->lastInsertId();
+                } else {
+                    throw new AuthException("Auth error : Une erreur est survenu");
+                }
+            } catch (AuthException $e) {
+                throw new AuthException($e->getMessage());
+            }
+        }
+    }
+
+    public static function provideHashedPassword(string $passwd): string {
+        return password_hash($passwd, PASSWORD_DEFAULT, ['cost' => 12]);
+    }
+
+    public static function passwdVerify(string $passwd): bool {
+        $digit = preg_match("#[\d]#", $passwd); // au moins un digit
+        $special = preg_match("#[\W]#", $passwd); // au moins un car. spécial
+        $lower = preg_match("#[a-z]#", $passwd); // au moins une minuscule
+        $upper = preg_match("#[A-Z]#", $passwd); // au moins une majuscule
+        if ($digit) {
+            if ($special) {
+                if ($lower) {
+                    if ($upper) {
+                        if (strlen($passwd) < 10) {
+                            throw new AuthException("Mot de passe d'une longueur de 10 minimum");
                         } else {
-                            throw new AuthException("Pas de Majuscule");
+                            return true;
                         }
                     } else {
-                        throw new AuthException("Pas de miniscule");
+                        throw new AuthException("Pas de Majuscule");
                     }
                 } else {
-                    throw new AuthException("Pas de charactère special");
+                    throw new AuthException("Pas de miniscule");
                 }
             } else {
-                throw new AuthException("Pas de chiffre");
+                throw new AuthException("Pas de charactère special");
             }
+        } else {
+            throw new AuthException("Pas de chiffre");
         }
     }
 
