@@ -16,7 +16,7 @@ class AfficheCatalogue extends Action
         $sortGenre = $_GET['genre'] ?? '';
         $sortPublic = $_GET['public'] ?? '';
 
-        $series = $repo->getAllSeries($searchValue, $sortValue);
+        $repo->getAllSeries($searchValue, $sortValue, $sortGenre, $sortPublic);
 
         $html = '<div class="catalogue-container">';
         $html .= '<h1>Catalogue des séries</h1>';

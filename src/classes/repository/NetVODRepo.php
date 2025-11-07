@@ -60,6 +60,17 @@ class NetVODRepo
             $params[':search'] = "%$search%";
         }
 
+        // Partie filtre
+        if (!empty($genre)) {
+            $query .= " AND genre = :genre";
+            $params[':genre'] = $genre;
+        }
+
+        if (!empty($public)) {
+            $query .= " AND public = :public";
+            $params[':public'] = $public;
+        }
+
         //Partie avec le trie façon filtre
         switch ($sort) {
             case 'date_ajout':
@@ -92,7 +103,6 @@ class NetVODRepo
 
         return $series;
     }
-
 
     public  function getSerieById(int $idSerie): ?Serie
     {
