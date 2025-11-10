@@ -174,4 +174,13 @@ class NetVODRepo
         );
     }
 
+    /** Renvoie l'id du propriétaire d'une Liste */
+    public function getListOwner(int $$listId): ?int {
+        $sql = "SELECT id_user FROM Liste WHERE id_liste = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$listId]);
+        $row = $stmt->fetch();
+        return $row ? (int)$row['id_user'] : null;
+    }
+
 }
