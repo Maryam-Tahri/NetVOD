@@ -4,6 +4,7 @@ namespace iutnc\netVOD\repository;
 use Exception;
 use iutnc\netVOD\base\Episode;
 use iutnc\netVOD\base\Serie;
+use iutnc\netVOD\base\Liste;
 use PDO;
 
 class NetVODRepo
@@ -218,22 +219,20 @@ class NetVODRepo
         );
     }
 
-    public function getListPref():
+    public function getListePrefByUser(int $idUser): ?Liste
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_ep = ?");
-        $stmt->execute([$idEpisode]);
-        $ep = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$ep) return null;
-
-        return new Episode(
-            $ep['numero'],
-            $ep['titre_ep'],
-            $ep['resume_ep'],
-            $ep['duree'],
-            $ep['img'],
-            $ep['file']
+        // Récupérer la liste de type "préférence" pour un utilisateur donné
+        $stmt = $this->pdo->prepare(
+            "SELECT * FROM liste WHERE id_user = ? AND type_list = 'preference'"
         );
+        $stmt->execute([$idUser]);
+        $data = $stmt->fetch();
+
+        if (!$data) {
+            return null;
+        }
+
+        return new Liste($data['id_liste'], $data['id_user'], $data['type_list']);
     }
 
 }

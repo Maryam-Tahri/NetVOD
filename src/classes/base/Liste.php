@@ -9,13 +9,13 @@ class Liste
 
     private int $id_liste;
     private int $id_user;
-    private String $type;
+    private String $type_list;
 
-    public function __construct($id_liste, $id_user, $type)
+    public function __construct($id_liste, $id_user, $type_list)
     {
         $this->id_liste = $id_liste;
         $this->id_user = $id_user;
-        $this->type = $type;
+        $this->type_list = $type_list;
     }
 
 
