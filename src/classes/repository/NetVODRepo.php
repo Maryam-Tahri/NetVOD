@@ -235,4 +235,30 @@ class NetVODRepo
         return new Liste($data['id_liste'], $data['id_user'], $data['type_list']);
     }
 
+    public function getSeriesByListe(int $idListe): array
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT s.* FROM serie s 
+         INNER JOIN list2serie sl ON s.id_serie = sl.id_serie 
+         WHERE sl.id_liste = ?"
+        );
+        $stmt->execute([$idListe]);
+
+        $series = [];
+        while ($data = $stmt->fetch()) {
+            $serie = new Serie(
+                $data['id_serie'],
+                $data['titre_serie'],
+                $data['descriptif'],
+                $data['annee'],
+                $data['genre'],
+                $data['public_vise'],
+                $data['img']
+            );
+            $series[] = $serie;
+        }
+
+        return $series;
+    }
+
 }
