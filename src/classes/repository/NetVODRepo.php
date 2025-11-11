@@ -145,7 +145,7 @@ class NetVODRepo
 
         return $series;
     }
-    
+
     public  function getSerieById(int $idSerie): ?Serie
     {
         $stmt = $this->pdo->prepare("SELECT * FROM serie WHERE id_serie = ?");
@@ -201,6 +201,24 @@ class NetVODRepo
     }
 
     public function getEpisodeById(int $idEpisode): ?Episode
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_ep = ?");
+        $stmt->execute([$idEpisode]);
+        $ep = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$ep) return null;
+
+        return new Episode(
+            $ep['numero'],
+            $ep['titre_ep'],
+            $ep['resume_ep'],
+            $ep['duree'],
+            $ep['img'],
+            $ep['file']
+        );
+    }
+
+    public function getListPref():
     {
         $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_ep = ?");
         $stmt->execute([$idEpisode]);
