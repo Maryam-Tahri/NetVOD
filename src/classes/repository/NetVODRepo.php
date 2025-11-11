@@ -82,19 +82,53 @@ class NetVODRepo
 
 
 
-    public function getAllSeries(?string $search = null): array
+    public function getAllSeries(?string $search = null, string $sort = 'titre_serie', ?string $genre = null, ?string $public = null): array
     {
-        if ($search) {
-            $sql = "SELECT * FROM Serie 
-                WHERE titre_serie LIKE :search 
-                ORDER BY titre_serie";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute(['search' => "%$search%"]);
-        } else {
-            $sql = "SELECT * FROM Serie ORDER BY titre_serie";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();
+        $params = [];
+        $query = "SELECT s.*, 
+                     (SELECT COUNT(*) FROM episode e WHERE e.id_serie = s.id_serie) AS nb_episodes
+              FROM serie s";
+
+        $whereAdded = false;
+
+        // Partie recherche perso
+        if (!empty($search)) {
+            $query .= " WHERE (s.titre_serie LIKE :search OR s.descriptif LIKE :search)";
+            $params[':search'] = "%$search%";
+            $whereAdded = true;
         }
+
+        // Partie filtre
+        if (!empty($genre)) {
+            $query .= $whereAdded ? " AND" : " WHERE";
+            $query .= " s.genre = :genre";
+            $params[':genre'] = $genre;
+            $whereAdded = true;
+        }
+
+        if (!empty($public)) {
+            $query .= $whereAdded ? " AND" : " WHERE";
+            $query .= " s.public_vise = :public";
+            $params[':public'] = $public;
+            $whereAdded = true;
+        }
+
+        // Partie Tri
+        switch ($sort) {
+            case 'date_ajout':
+                $query .= " ORDER BY s.date_ajout DESC";
+                break;
+            case 'nb_episodes':
+                $query .= " ORDER BY nb_episodes DESC";
+                break;
+            default:
+                $query .= " ORDER BY s.titre_serie ASC";
+                break;
+        }
+
+        //Partie execution
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($params);
 
         $series = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -111,8 +145,8 @@ class NetVODRepo
 
         return $series;
     }
-
-    public function getSerieById(int $idSerie): ?Serie
+    
+    public  function getSerieById(int $idSerie): ?Serie
     {
         $stmt = $this->pdo->prepare("SELECT * FROM serie WHERE id_serie = ?");
         $stmt->execute([$idSerie]);

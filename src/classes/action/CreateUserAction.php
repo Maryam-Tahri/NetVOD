@@ -2,9 +2,11 @@
 
 namespace iutnc\netVOD\action;
 
+use Exception;
 use iutnc\netVOD\action\Action;
 use iutnc\netVOD\auth\AuthnProvider;
 use iutnc\netVOD\exception\AuthException;
+use iutnc\netVOD\repository\NetVODRepo;
 
 class CreateUserAction extends Action
 {
@@ -41,6 +43,20 @@ class CreateUserAction extends Action
         try {
             $id = AuthnProvider::register($email, $passwd);
             AuthnProvider::signin($email, $passwd);
+
+            // Création des trois listes vide associer à l'utilisateur
+            try {
+                $pdo = NetVODRepo::getInstance()->getPDO();
+                $stmt = $pdo->prepare("INSERT INTO Liste (id_user, type_list) VALUES 
+                                                    (:id_user, 'preference'),
+                                                    (:id_user, 'en_cours'),
+                                                    (:id_user, 'deja_visionne')");
+                $stmt->execute(['id_user' => $id]);
+            } catch (Exception $e) {
+                return $e->getMessage() . "<br><p class='fail'>❌ <b>Impossible</b> de créer votre <b>compte utilisateur</b></p><br>
+                                           <a href='?action=default' class='btn btn-home'>Retour a l'accueil</a>";
+            }
+
             return "<p>✅ Inscription réussie (ID $id) 🎉. Vous êtes maintenant connecté 👍.</p>
                     <a href='?action=default' class='btn btn-blue'>Retour à l'accueil</a>";
         } catch (AuthException $e) {
