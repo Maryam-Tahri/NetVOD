@@ -14,9 +14,12 @@ class ResetPasswdAction extends Action
     public function execute(): string
     {
         if ($this->http_method === 'GET') {
+            $token = $_GET['token'] ?? '';
+            if (!$token) return "<p class='fail'>❌ Lien invalide : aucun token fourni.</p><br><a href='?action=default' class='btn btn-home'>Retour à l'accueil</a>";
+
             return <<<HTML
                 <h2>Réinitialiser son mot de passe</h2>
-                <form method="post" action="?action=reset-passwd">
+                <form method="post" action="?action=reset-passwd&token=$token">
                     <label>Mot de passe :</label>
                     <input type="password" name="passwd" id="passwd" placeholder="MotDeP@sse123" title="1 Majuscule, 1 minuscule, 1 chiffre et 1 charactère spécial minimum + Taille mot de passe 10 minimum" required><br>
 
@@ -69,7 +72,8 @@ class ResetPasswdAction extends Action
                     if (AuthnProvider::passwdVerify($passwd))
                     unset($_SESSION['form_data_tmp']);
                     $hash = AuthnProvider::provideHashedPassword($passwd);
-                    // TODO : faire une update de la table user avec le nouveau mot de passe ; aucune fonctionnalités pour mot de passe oublié n'est testées.
+                    $majPasswd = $pdo->prepare("UPDATE Users SET password = ? WHERE id_user = ?");
+                    $majPasswd->execute([$hash, $id_user]);
                 }
             } catch (AuthException $e) {
                 $toShow = "<p>❌ " . htmlspecialchars($e->getMessage()) . " ❌</p>";
