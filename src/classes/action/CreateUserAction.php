@@ -42,6 +42,7 @@ class CreateUserAction extends Action
 
         $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         $passwd = $_POST['passwd'] ?? '';
+        $username = filter_var($_POST['username'] ?? '', FILTER_SANITIZE_STRING);
 
         try {
             $id = AuthnProvider::register($email, $passwd);
@@ -62,6 +63,8 @@ class CreateUserAction extends Action
                                                     (:id_user, 'en_cours'),
                                                     (:id_user, 'deja_visionne')");
                 $stmt->execute(['id_user' => $id]);
+                $createInfoUser = $pdo->prepare("INSERT INTO users_infos (id_user, nom, prenom, username, genre, public_vise) VALUES (?, '', '', ?, '', '')");
+                $createInfoUser->execute([$id, $username]);
             } catch (Exception $e) {
                 return $e->getMessage() . "<br><p class='fail'>❌ <b>Impossible</b> de créer votre <b>compte utilisateur</b></p><br>
                                            <a href='?action=default' class='btn btn-home'>Retour a l'accueil</a>";
