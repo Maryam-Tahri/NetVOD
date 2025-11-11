@@ -13,7 +13,7 @@ class DefaultAction extends Action
 
         // Vérifier que l'utilisateur est connecté
         if (!isset($_SESSION['user']['id'])) {
-            return $html . "<p>Veuillez vous connecter pour accéder à vos préférences.</p>";
+            return $html;
         }
 
         $repo = NetVODRepo::getInstance();
@@ -27,7 +27,7 @@ class DefaultAction extends Action
 
         $renderer = new ListRender();
         $html = '<div class="liste-detail-container">';
-        $html .= $renderer->renderSeriesListe($liste);
+        $html .= $renderer->renderListe($liste);
         $html .= '</div>';
 
         return $html;

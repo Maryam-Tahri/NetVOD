@@ -16,7 +16,7 @@ class ListRender
 
         $html = <<<HTML
         <div class="list-card">
-            <a href="?action=liste&id_liste=$id_liste">
+                    <a href="?action=liste&id=$id_liste">
                 <h2>$type</h2>
             </a>
         </div>

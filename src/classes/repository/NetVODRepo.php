@@ -261,4 +261,23 @@ class NetVODRepo
         return $series;
     }
 
+    public function getListeById(int $idListe): ?Liste
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM liste WHERE id_liste = ?");
+        $stmt->execute([$idListe]);
+
+        $data = $stmt->fetch();
+
+        if ($data) {
+            return new Liste(
+                $data['id_liste'],
+                $data['id_user'],
+                $data['type_list']
+            );
+        }
+
+        return null;
+    }
+
+
 }

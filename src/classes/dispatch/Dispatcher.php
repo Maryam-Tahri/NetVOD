@@ -15,6 +15,7 @@ use iutnc\netVOD\action\CreateUserAction;
 use iutnc\netVOD\action\logoutAction;
 use iutnc\netVOD\action\signinAction;
 use iutnc\netVOD\action\AjouterFavoris;
+use iutnc\netVOD\action\AfficheListe;
 
 class Dispatcher
 {
@@ -56,6 +57,10 @@ class Dispatcher
                 break;
             case "episode":
                 $action = new AfficheEpisode();
+                $this->renderPage($action->execute());
+                break;
+            case "liste":
+                $action = new AfficheListe();
                 $this->renderPage($action->execute());
                 break;
             default:
