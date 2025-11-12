@@ -24,11 +24,12 @@ HTML;
             $serie = unserialize($_SESSION['serie']);
             $ep = $_GET['watch']-1;
             if (isset($serie->listeEpisodes[$ep])) {
+                $actuel= $_GET['watch'];
                 $preced=<<<HTML
-<button>Pas d'épisode précédent</button>
+<a href="?action=display-episode&watch={$actuel}"><button>Finir l'épisode sans passer au prochain(pas de précédent)</button></a>
 HTML;
                 $suivant=<<<HTML
-<button>Pas d'épisode suivant</button>
+<a href="?action=display-episode&watch={$actuel}"><button>Finir l'épisode (Pas d'épisode suivant)</button></a>
 HTML;
                 $episode=$serie->listeEpisodes[$ep];
                 NetVODRepo::getInstance()->addToEnCours($episode->id_ep);
