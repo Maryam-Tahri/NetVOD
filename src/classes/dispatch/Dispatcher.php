@@ -2,6 +2,7 @@
 
 namespace iutnc\netVOD\dispatch;
 
+use iutnc\netVOD\action\ActivateAccountAction;
 use iutnc\netVOD\action\AddPlaylistAction;
 use iutnc\netVOD\action\AddPodcastTrackAction;
 use iutnc\netVOD\action\AddTrackAction;
@@ -13,7 +14,10 @@ use iutnc\netVOD\action\DeleteTrackAction;
 use iutnc\netVOD\action\DisplayPlaylistAction;
 use iutnc\netVOD\action\CreateUserAction;
 use iutnc\netVOD\action\logoutAction;
+use iutnc\netVOD\action\ResetPasswdAction;
+use iutnc\netVOD\action\ResetPasswdTokenAction;
 use iutnc\netVOD\action\signinAction;
+use iutnc\netVOD\action\UserProfileSettingsAction;
 
 class Dispatcher
 {
@@ -53,6 +57,22 @@ class Dispatcher
                 $action = new AfficheEpisode();
                 $this->renderPage($action->execute());
                 break;
+            case "activate-account":
+                $action = new ActivateAccountAction();
+                $this->renderPage($action->execute());
+                break;
+            case "reset-passwd-token":
+                $action = new ResetPasswdTokenAction();
+                $this->renderPage($action->execute());
+                break;
+            case "reset-passwd":
+                $action = new ResetPasswdAction();
+                $this->renderPage($action->execute());
+                break;
+            case "change-user-info":
+                $action = new UserProfileSettingsAction();
+                $this->renderPage($action->execute());
+                break;
             default:
                 $this->renderPage("pas d'action");
                 break;
@@ -68,6 +88,7 @@ class Dispatcher
 HTML;
         }else{
             $conn = <<<HTML
+            <a href='?action=change-user-info'>Profil</a>
             <a href='?action=logout'>se déconnecter</a>
            HTML;
         }
