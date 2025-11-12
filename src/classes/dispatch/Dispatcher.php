@@ -14,6 +14,7 @@ use iutnc\netVOD\action\DisplayEpisodeAction;
 use iutnc\netVOD\action\DisplayPlaylistAction;
 use iutnc\netVOD\action\CreateUserAction;
 use iutnc\netVOD\action\logoutAction;
+use iutnc\netVOD\action\MySerieAction;
 use iutnc\netVOD\action\signinAction;
 
 class Dispatcher
@@ -58,6 +59,10 @@ class Dispatcher
                 $action = new DisplayEpisodeAction();
                 $this->renderPage($action->execute());
                 break;
+            case "mySeries":
+                $action = new MySerieAction();
+                $this->renderPage($action->execute());
+                break;
             default:
                 $this->renderPage("pas d'action");
                 break;
@@ -74,6 +79,7 @@ HTML;
         }else{
             $conn = <<<HTML
             <a href='?action=logout'>se déconnecter</a>
+            <a href="?action=mySeries">Mes séries</a>
            HTML;
         }
         $res = <<<HTML

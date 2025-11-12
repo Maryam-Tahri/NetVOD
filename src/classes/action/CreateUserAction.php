@@ -57,7 +57,7 @@ class CreateUserAction extends Action
                                            <a href='?action=default' class='btn btn-home'>Retour a l'accueil</a>";
             }
 
-            return "<p>✅ Inscription réussie (ID $id) 🎉. Vous êtes maintenant connecté 👍.</p>
+            return "<p>✅ Inscription réussie 🎉. Vous êtes maintenant connecté 👍.</p>
                     <a href='?action=default' class='btn btn-blue'>Retour à l'accueil</a>";
         } catch (AuthException $e) {
             $_SESSION['form_data_tmp'] = [

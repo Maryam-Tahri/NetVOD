@@ -15,6 +15,12 @@ class DisplayEpisodeAction extends Action
 HTML;
         }
         if (isset($_GET['watch'])) {
+            if (isset($_SESSION['last_ep'])) {
+                $lastep = unserialize($_SESSION['last_ep']);
+                $repo = NetVODRepo::getInstance();
+                $repo->addToDejaVu($lastep->id_ep);
+            }
+            unset($_SESSION['last_ep']);
             $serie = unserialize($_SESSION['serie']);
             $ep = $_GET['watch']-1;
             if (isset($serie->listeEpisodes[$ep])) {
@@ -25,7 +31,7 @@ HTML;
 <button>Pas d'épisode suivant</button>
 HTML;
                 $episode=$serie->listeEpisodes[$ep];
-
+                NetVODRepo::getInstance()->addToEnCours($episode->id_ep);
                 if(isset($serie->listeEpisodes[$ep-1])){
                     $eppre=$_GET['watch']-1;
                     $preced = <<<HTML
@@ -38,6 +44,7 @@ HTML;
                     <a href="?action=display-episode&watch={$eppro}"><button >episode Suivant</button></a>
                     HTML;
                 }
+                $_SESSION['last_ep']=serialize($episode);
                 return <<<HTML
                 <div class="player">
                   <video

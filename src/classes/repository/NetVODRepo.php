@@ -193,13 +193,80 @@ class NetVODRepo
         );
     }
 
-    /** Renvoie l'id du propriétaire d'une Liste */
-    public function getListOwner(int $$listId): ?int {
+    // Renvoie l'id du propriétaire d'une Liste
+    public function getListOwner(int $listId): ?int {
         $sql = "SELECT id_user FROM Liste WHERE id_liste = ?";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$listId]);
         $row = $stmt->fetch();
         return $row ? (int)$row['id_user'] : null;
     }
+
+    public function getFavorites(int $idUser): array{
+        $stmt = $this->pdo->prepare("SELECT episode.id_serie FROM list2episode INNER JOIN episode ON episode.id_ep=list2episode.id_ep INNER JOIN liste ON liste.id_liste = list2episode.id_liste WHERE liste.id_user = ? AND liste.type_list = 'preference'");
+        $stmt->execute([$idUser]);
+        $series = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $series [] = $this->getSerieById($row['id_serie']);
+        }
+        return $series;
+    }
+
+
+    public function getDejaVu(int $idUser): array{
+        $stmt = $this->pdo->prepare("SELECT DISTINCT(episode.id_serie) FROM list2episode INNER JOIN episode ON episode.id_ep=list2episode.id_ep INNER JOIN liste ON liste.id_liste = list2episode.id_liste WHERE liste.id_user = ? AND type_list = 'deja_visionne'");
+        $stmt->execute([$idUser]);
+        $series = ['en_cours'=>[],'deja_vu'=>[]];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $stmt2 = $this->pdo->prepare("SELECT count(*) FROM list2episode INNER JOIN liste ON liste.id_liste = list2episode.id_liste ".
+                "INNER JOIN episode ON episode.id_ep = list2episode.id_ep ".
+                "WHERE liste.id_user = ? AND type_list = 'deja_visionne' AND episode.id_serie = ?");
+            $stmt2->execute([$idUser, $row['id_serie']]);
+            $stmt3 = $this->pdo->prepare("SELECT count(*) FROM episode WHERE id_serie = ?");
+            $stmt3->execute([$row['id_serie']]);
+            $nbVu = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $nbMax = $stmt3->fetch(PDO::FETCH_ASSOC);
+            if ($nbVu['count(*)'] == $nbMax['count(*)']) {
+                $series['deja_vu'][] = $this->getSerieById($row['id_serie']);
+            }else{
+                $series['en_cours'][] = $this->getSerieById($row['id_serie']);
+            }
+        }
+        return $series;
+    }
+
+
+    public function addToEnCours(int $id_ep){
+        $stmt1 = $this->pdo->prepare("SELECT id_liste FROM liste WHERE id_user = ? AND type_list = 'en_cours'");
+        $stmt1->execute([$_SESSION['user']['id']]);
+        $id_liste = $stmt1->fetch(PDO::FETCH_ASSOC);
+        $stmt2 = $this->pdo->prepare("SELECT id_ep FROM list2episode WHERE id_ep= ? AND id_liste = ? ");
+        $stmt2->execute([$id_ep,$id_liste['id_liste']]);
+        $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+        if (!$row){
+            $stmt3 = $this->pdo->prepare("INSERT INTO list2episode (id_ep, id_liste) VALUES(?, ?)");
+            $stmt3->execute([$id_ep,$id_liste['id_liste']]);
+        }
+
+
+    }
+    public function addToDejaVu(int $id_ep){
+        $stmt1 = $this->pdo->prepare("SELECT id_liste FROM liste WHERE id_user = ? AND type_list = 'en_cours'");
+        $stmt1->execute([$_SESSION['user']['id']]);
+        $id_liste = $stmt1->fetch(PDO::FETCH_ASSOC);
+        $stmt12 = $this->pdo->prepare("DELETE FROM list2episode WHERE id_ep = ? AND id_liste = ?");
+        $stmt12->execute([$id_ep,$id_liste['id_liste']]);
+        $stmt = $this->pdo->prepare("SELECT id_liste FROM liste WHERE id_user = ? AND type_list = 'deja_visionne'");
+        $stmt->execute([$_SESSION['user']['id']]);
+        $id_liste = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt2 = $this->pdo->prepare("SELECT id_ep FROM list2episode WHERE id_liste = ? AND id_ep= ? ");
+        $stmt2->execute([$id_liste['id_liste'],$id_ep]);
+        $row  = $stmt2->fetch(PDO::FETCH_ASSOC);
+        if (!$row){
+            $stmt3 = $this->pdo->prepare("INSERT INTO list2episode (id_ep, id_liste) VALUES(?, ?)");
+            $stmt3->execute([$id_ep, $id_liste['id_liste']]);
+        }
+    }
+
 
 }
