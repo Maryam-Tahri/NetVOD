@@ -74,11 +74,9 @@ class Dispatcher
             $conn = <<<HTML
             <a href='?action=add-user'>Inscription</a>
             <a href='?action=signin'>Se connecter</a>
-            <a href="?action=catalogue">Afficher le catalogue</a>
 HTML;
         }else{
             $conn = <<<HTML
-            <a href="?action=catalogue">Afficher le catalogue</a>
             <a href='?action=logout'>se déconnecter</a>
            HTML;
         }
@@ -88,7 +86,7 @@ HTML;
         <head>
             <meta charset="UTF-8">
             <title>NetVOD</title>
-            <link rel='stylesheet' href='../css/style.css'>
+            <link rel='stylesheet' href='/NetVOD/css/style.css?=v3'>
         </head>
         <body>
             <header>

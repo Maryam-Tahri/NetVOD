@@ -53,18 +53,18 @@ class CreateUserAction extends Action
                                                     (:id_user, 'deja_visionne')");
                 $stmt->execute(['id_user' => $id]);
             } catch (Exception $e) {
-                return $e->getMessage() . "<br><p class='fail'>❌ <b>Impossible</b> de créer votre <b>compte utilisateur</b></p><br>
+                return $e->getMessage() . "<br><p class='fail'> <b>Impossible</b> de créer votre <b>compte utilisateur</b></p><br>
                                            <a href='?action=default' class='btn btn-home'>Retour a l'accueil</a>";
             }
 
-            return "<p>✅ Inscription réussie (ID $id) 🎉. Vous êtes maintenant connecté 👍.</p>
+            return "<p class='success'>Inscription réussie. Vous êtes maintenant connecté.</p>
                     <a href='?action=default' class='btn btn-blue'>Retour à l'accueil</a>";
         } catch (AuthException $e) {
             $_SESSION['form_data_tmp'] = [
                 'username' => $_POST['username'] ?? '',
                 'email' => $_POST['email'] ?? ''
             ];
-            return "<p>❌ " . htmlspecialchars($e->getMessage()) . " ❌</p><a href='?action=add-user' class='btn btn-retry'>Réessayer</a>";
+            return "<p class='fail'>" . htmlspecialchars($e->getMessage()) . "</p><a href='?action=add-user' class='btn btn-retry'>Réessayer</a>";
         }
     }
 }
