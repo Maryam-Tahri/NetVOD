@@ -3,7 +3,25 @@ CREATE TABLE Users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role int NOT NULL,
-    carte_credit VARCHAR(255)
+    carte_credit VARCHAR(255),
+    is_active BOOLEAN DEFAULT false
+) ENGINE=InnoDB;
+
+CREATE TABLE Tokens (
+    token varchar(255) PRIMARY KEY,
+    id_user INT,
+    expiration_token datetime NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES Users(id_user) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE Users_Infos (
+    id_user INT PRIMARY KEY NOT NULL,
+    nom VARCHAR(255) NOT NULL,
+    prenom VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    genre VARCHAR(100),
+    public_vise VARCHAR(50),
+    FOREIGN KEY (id_user) REFERENCES Users(id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE Serie (
