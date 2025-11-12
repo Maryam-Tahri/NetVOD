@@ -280,4 +280,19 @@ class NetVODRepo
     }
 
 
+    public function getUserIdByEmail(string $email) : int {
+        $stmt = $this->pdo->prepare("SELECT id_user FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$user) return -1;
+        return $user['id_user'];
+    }
+
+    public function getUserInfosByID(int $idUser) : ?array {
+        $stmt = $this->pdo->prepare("SELECT * FROM users_infos WHERE id_user = ?");
+        $stmt->execute([$idUser]);
+        $row = $stmt->fetch();
+        if (!$row) return null;
+        return $row;
+    }
 }

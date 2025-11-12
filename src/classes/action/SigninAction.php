@@ -3,6 +3,7 @@
 namespace iutnc\netVOD\action;
 use iutnc\netVOD\auth\AuthnProvider;
 use iutnc\netVOD\exception\AuthException;
+use iutnc\netVOD\repository\NetVODRepo;
 
 class SigninAction
 {
@@ -29,7 +30,7 @@ HTML;
                     <input type='password' name='mdp' id='mdp' required><br><br>               
 
                     <button type='submit'>Connexion</button>
-                </form>";
+                </form><a href='?action=reset-passwd-token' class='btn'>Mot de passe oublié ?</a>";
             return $html;
         }
 
@@ -43,9 +44,18 @@ HTML;
                 AuthnProvider::signin($email, $pswd);
             }catch (AuthException $e){
                 if ($_SESSION['try'] < 3){
-                    $html= <<<HTML
-                    <div><p class="incorrect">Email et/ou mot de passe incorrect !</p></div>
-                    HTML;
+                    $html = "<p class='fail'>❌ " . htmlspecialchars($e->getMessage()) . " ❌</p>";
+                    if ($e->getTypeError() === 1) {
+                        $pdo = NetVODRepo::getInstance()->getPDO();
+                        $deleteUser = $pdo->prepare("DELETE FROM Users WHERE email = ?");
+                        $deleteUser->execute([$email]);
+                        $html .= "<a href='?action=add-user' class='btn'>Se réinscrire</a>";
+                    } else {
+                        $html .= "<a href='?action=signin' class='btn'>Se connecter</a>";
+                    }
+//                    $html .= <<<HTML
+//                    <div><p class="fail">Email et/ou mot de passe incorrect !</p></div>
+//                    HTML;
                     $_SESSION['try']+=1;
                 }else{
                     $nom_dossier = '../img';

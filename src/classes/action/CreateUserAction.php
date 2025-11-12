@@ -5,8 +5,11 @@ namespace iutnc\netVOD\action;
 use Exception;
 use iutnc\netVOD\action\Action;
 use iutnc\netVOD\auth\AuthnProvider;
+use iutnc\netVOD\base\TokenGiver;
 use iutnc\netVOD\exception\AuthException;
+use iutnc\netVOD\exception\TokenException;
 use iutnc\netVOD\repository\NetVODRepo;
+use PDOException;
 
 class CreateUserAction extends Action
 {
@@ -39,10 +42,18 @@ class CreateUserAction extends Action
 
         $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         $passwd = $_POST['passwd'] ?? '';
+        $username = filter_var($_POST['username'] ?? '', FILTER_SANITIZE_STRING);
 
         try {
             $id = AuthnProvider::register($email, $passwd);
-            AuthnProvider::signin($email, $passwd);
+
+            // Creation du token pour valider l'email
+            try {
+                $token = TokenGiver::createToken($id);
+            } catch (Exception $e) {
+                return $e->getMessage() . "<br><p class='fail'>❌ <b>Impossible</b> d'initialiser un <b>token</b> pour valider votre <b>email</b>.</p><br>
+                                           <a href='?action=default' class='btn btn-home'>Retour a l'accueil</a>";
+            }
 
             // Création des trois listes vide associer à l'utilisateur
             try {
@@ -52,19 +63,24 @@ class CreateUserAction extends Action
                                                     (:id_user, 'en_cours'),
                                                     (:id_user, 'deja_visionne')");
                 $stmt->execute(['id_user' => $id]);
+                $createInfoUser = $pdo->prepare("INSERT INTO users_infos (id_user, nom, prenom, username, genre, public_vise) VALUES (?, '', '', ?, '', '')");
+                $createInfoUser->execute([$id, $username]);
             } catch (Exception $e) {
                 return $e->getMessage() . "<br><p class='fail'> <b>Impossible</b> de créer votre <b>compte utilisateur</b></p><br>
                                            <a href='?action=default' class='btn btn-home'>Retour a l'accueil</a>";
             }
 
-            return "<p class='success'>Inscription réussie. Vous êtes maintenant connecté.</p>
-                    <a href='?action=default' class='btn btn-blue'>Retour à l'accueil</a>";
+            return "<a href='?action=activate-account&token=$token'  class='btn btn-confirm'>Activer votre compte</a><p>Attention, valable que 5 minutes.</p>";
         } catch (AuthException $e) {
             $_SESSION['form_data_tmp'] = [
                 'username' => $_POST['username'] ?? '',
                 'email' => $_POST['email'] ?? ''
             ];
-            return "<p class='fail'>" . htmlspecialchars($e->getMessage()) . "</p><a href='?action=add-user' class='btn btn-retry'>Réessayer</a>";
+            $toShow = "<p class='fail'> " . htmlspecialchars($e->getMessage()) . " ❌</p>";
+            if (strpos($e->getMessage(), "email"))
+                $toShow .= "<a href='?action=signin' class='btn btn-signin'>Se connecter</a><br>";
+            $toShow .= "<a href='?action=add-user' class='btn btn-retry'>Réessayer</a>";
+            return $toShow;
         }
     }
 }
