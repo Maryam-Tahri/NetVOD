@@ -8,7 +8,7 @@ use iutnc\netVOD\render\SerieRenderer;
 use iutnc\netVOD\repository\NetVODRepo;
 
 try{
-    NetVODRepo::setConfig(__DIR__ . '/db.config.ini');
+    NetVODRepo::setConfig( '../../../../db.config.ini');
 }catch(Exception $e){
     echo $e->getMessage();
 }
