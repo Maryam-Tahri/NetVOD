@@ -515,6 +515,16 @@ button:hover,
     background-clip: text;
 }
 
+.list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
 /* ========================================
    MESSAGES
    ======================================== */
@@ -671,12 +681,10 @@ button:hover,
 }
 
 .episode-actions a::before {
-    content: '⭐';
     font-size: 1.1rem;
 }
 
 .episode-actions a:nth-child(2)::before {
-    content: '♥';
     color: var(--primary-color);
 }
 
@@ -861,4 +869,156 @@ button:hover,
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+/* ============  VARIABLES DE COULEURS (logo) ============ */
+:root {
+    --bleu-fonce: #0A1A46;      /* Couleur principale logo */
+    --bleu-clair: #3A5FCD;      /* Accent logo */
+    --blanc: #ffffff;
+    --gris-fonce: #1b1b1b;
+    --gris-clair: #dcdcdc;
+}
+
+/* ============  PAGE GLOBALE ============ */
+
+body {
+    margin: 0;
+    background-color: #000;
+    font-family: Arial, sans-serif;
+    color: var(--blanc);
+}
+
+/* ============  CONTAINERS ============ */
+
+.catalogue-container,
+.liste-detail-container,
+.serie-detail-container {
+    width: 90%;
+    margin: 30px auto;
+    color: var(--blanc);
+}
+
+/* ============  GRILLE DES SERIES ============ */
+
+.series-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    justify-items: center;
+    align-items: flex-start;
+}
+
+/* ============  CARTE SERIE ============ */
+
+.serie-card {
+    width: 220px;
+    background-color: var(--gris-fonce);
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s ease;
+    border: 1px solid var(--bleu-clair);
+}
+
+.serie-card:hover {
+    transform: scale(1.03);
+}
+
+.serie-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.serie-card h3 {
+    padding: 10px;
+}
+
+/* ============  BOUTONS ============ */
+
+.btn {
+    padding: 10px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--blanc);
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.btn-blue {
+    background-color: var(--bleu-clair);
+}
+
+.btn-watch {
+    background-color: var(--bleu-fonce);
+}
+
+/* ============  SUCCÈS & ERREUR ============ */
+
+.success {
+    padding: 10px;
+    margin: 15px 0;
+    background-color: var(--bleu-clair);
+    border-left: 4px solid var(--bleu-fonce);
+}
+
+.error {
+    padding: 10px;
+    margin: 15px 0;
+    background-color: #444;
+    border-left: 4px solid #777;
+}
+
+/* ============  SITUATION AUCUNE SERIE ============ */
+
+.no-content {
+    text-align: center;
+    padding: 40px;
+    background-color: var(--gris-fonce);
+    border-radius: 10px;
+    font-size: 1.2em;
+}
+.liste-section {
+    background-color: #111;   /* Fond sombre propre */
+    padding: 20px;
+    margin-bottom: 40px;
+    border-radius: 12px;
+}
+
+.series-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;                /* ESPACE entre les séries */
+    justify-content: center;  /* centre les cartes */
+}
+
+
+.liste-section h3 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+    text-align: left;
+    font-weight: 700;
+
+    /* Dégradé bleu/violet (mêmes couleurs que NETVOD) */
+    background: linear-gradient(90deg, #4d7cff, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    position: relative;
+    padding-bottom: 8px;
+}
+
+.liste-section h3::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+
+    /* petit trait lumineux en dessous */
+    background: linear-gradient(90deg, #4d7cff, #8b5cf6);
+    border-radius: 3px;
 }

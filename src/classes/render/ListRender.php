@@ -15,15 +15,18 @@ class ListRender
         $id_liste = $liste->id_liste;
 
         $html = <<<HTML
-        <div class="list-card">
-                    <a href="?action=liste&id=$id_liste">
-                <h2>$type</h2>
-            </a>
+        <div class="list-container">
+            <div class="list-card">
+                <a href="?action=liste&id=$id_liste">
+                    <h2>$type</h2>
+                </a>
+            </div>
         </div>
-        HTML;
+    HTML;
 
         return $html;
     }
+
 
 
     public function renderSeriesListe(Liste $liste): string
