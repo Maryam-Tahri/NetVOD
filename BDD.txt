@@ -156,6 +156,14 @@ UPDATE Episode SET img = 'img/Nuit1.png' WHERE id_ep = 20;
 UPDATE Episode SET img = 'img/Nuit2.png' WHERE id_ep = 21;
 
 
+UPDATE Serie SET img = 'img/Lac.png' WHERE id_serie = 1;
+UPDATE Serie SET img = 'img/Eau.png' WHERE id_serie = 2;
+UPDATE Serie SET img = 'img/Chevaux.png' WHERE id_serie = 3;
+UPDATE Serie SET img = 'img/Plage.png' WHERE id_serie = 4;
+UPDATE Serie SET img = 'img/Champion.png' WHERE id_serie = 5;
+UPDATE Serie SET img = 'img/Nuit.png' WHERE id_serie = 6;
+
+
 
 
 
