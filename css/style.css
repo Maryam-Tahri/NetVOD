@@ -450,7 +450,7 @@ button:hover,
    ======================================== */
 .list-card {
     background: linear-gradient(135deg, var(--card-bg) 0%, var(--darker-bg) 100%);
-    padding: 40px;
+    padding: 30px 40px;
     border-radius: var(--border-radius);
     text-align: center;
     transition: var(--transition);
@@ -458,6 +458,8 @@ button:hover,
     border: 2px solid transparent;
     position: relative;
     overflow: hidden;
+    max-width: 400px;
+    margin: 20px auto;
 }
 
 .list-card::before {
@@ -488,6 +490,17 @@ button:hover,
     color: var(--text-primary);
     position: relative;
     z-index: 1;
+    display: block;
+}
+
+.list-card h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
 }
 
 .liste-detail h2 {
@@ -534,8 +547,201 @@ button:hover,
 }
 
 /* ========================================
-   RESPONSIVE
+   LECTEUR VIDÉO
    ======================================== */
+.player {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 30px;
+    background-color: var(--darker-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    position: relative;
+}
+
+.player video {
+    width: 100%;
+    height: auto;
+    display: block;
+    background-color: #000;
+}
+
+/* Container pour les informations de l'épisode */
+.episode-player-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.episode-controls {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.episode-controls a {
+    text-decoration: none;
+}
+
+.episode-controls button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    padding: 12px 24px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.episode-controls button::before {
+    content: '←';
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+
+.episode-controls button:last-child::before {
+    content: '';
+    margin-right: 0;
+}
+
+.episode-controls button:last-child::after {
+    content: '→';
+    margin-left: 8px;
+    font-size: 1.2rem;
+}
+
+.episode-controls button:hover {
+    background: var(--gradient);
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+/* Informations de l'épisode */
+.episode-info {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    margin-top: 20px;
+}
+
+.episode-info h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.episode-info p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-size: 1.05rem;
+}
+
+.episode-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+.episode-actions a {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.episode-actions a::before {
+    content: '⭐';
+    font-size: 1.1rem;
+}
+
+.episode-actions a:nth-child(2)::before {
+    content: '♥';
+    color: var(--primary-color);
+}
+
+.episode-actions a:hover {
+    background: var(--gradient);
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* Loading spinner pour la vidéo */
+.player::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.player video[preload] + .player::before {
+    opacity: 1;
+}
+
+@keyframes spin {
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Responsive pour le lecteur */
+@media (max-width: 768px) {
+    .episode-controls {
+        flex-direction: column;
+    }
+
+    .episode-controls button {
+        width: 100%;
+    }
+
+    .episode-info {
+        padding: 20px;
+    }
+
+    .episode-info h2 {
+        font-size: 1.4rem;
+    }
+
+    .episode-actions {
+        flex-direction: column;
+    }
+
+    .episode-actions a {
+        width: 100%;
+        justify-content: center;
+    }
+}
 @media (max-width: 768px) {
     header h1 {
         font-size: 1.8rem;
