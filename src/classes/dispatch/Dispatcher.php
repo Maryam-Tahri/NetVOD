@@ -2,6 +2,7 @@
 
 namespace iutnc\netVOD\dispatch;
 
+use iutnc\netVOD\action\ActivateAccountAction;
 use iutnc\netVOD\action\AddPlaylistAction;
 use iutnc\netVOD\action\AddPodcastTrackAction;
 use iutnc\netVOD\action\AddTrackAction;
@@ -51,6 +52,10 @@ class Dispatcher
                 break;
             case "episode":
                 $action = new AfficheEpisode();
+                $this->renderPage($action->execute());
+                break;
+            case "activate-account":
+                $action = new ActivateAccountAction();
                 $this->renderPage($action->execute());
                 break;
             default:
