@@ -17,6 +17,8 @@ use iutnc\netVOD\action\logoutAction;
 use iutnc\netVOD\action\ResetPasswdAction;
 use iutnc\netVOD\action\ResetPasswdTokenAction;
 use iutnc\netVOD\action\signinAction;
+use iutnc\netVOD\action\AjouterFavoris;
+use iutnc\netVOD\action\AfficheListe;
 use iutnc\netVOD\action\UserProfileSettingsAction;
 
 class Dispatcher
@@ -49,12 +51,20 @@ class Dispatcher
                 $action = new LogoutAction();
                 $this->renderPage($action->execute());
                 break;
+            case 'ajouter-favoris':
+                $action = new AjouterFavoris();
+                $this->renderPage($action->execute());
+                break;
             case "serie":
                 $action = new AfficheSerie();
                 $this->renderPage($action->execute());
                 break;
             case "episode":
                 $action = new AfficheEpisode();
+                $this->renderPage($action->execute());
+                break;
+            case "liste":
+                $action = new AfficheListe();
                 $this->renderPage($action->execute());
                 break;
             case "activate-account":
@@ -84,7 +94,6 @@ class Dispatcher
             $conn = <<<HTML
             <a href='?action=add-user'>Inscription</a>
             <a href='?action=signin'>Se connecter</a>
-            <a href="?action=catalogue">Afficher le catalogue</a>
 HTML;
         }else{
             $conn = <<<HTML
@@ -97,13 +106,13 @@ HTML;
         <html lang="fr">
         <head>
             <meta charset="UTF-8">
-            <title>Deefy</title>
-            <link rel='stylesheet' href='../css/style.css'>
+            <title>NetVOD</title>
+            <link rel='stylesheet' href='/NetVOD/css/style.css?=v3'>
         </head>
         <body>
             <header>
-                <h1>Deefy</h1>
-                <p>Votre espace personnel pour créer et écouter vos playlists</p>
+                <h1>NetVOD</h1>
+                <p>Votre espace personnel pour regarder les meilleures séries</p>
             </header>
 
             <nav>

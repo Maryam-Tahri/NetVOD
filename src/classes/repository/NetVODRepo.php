@@ -4,6 +4,7 @@ namespace iutnc\netVOD\repository;
 use Exception;
 use iutnc\netVOD\base\Episode;
 use iutnc\netVOD\base\Serie;
+use iutnc\netVOD\base\Liste;
 use PDO;
 
 class NetVODRepo
@@ -29,23 +30,58 @@ class NetVODRepo
         return self::$instance;
     }
 
-    public static function setConfig(string $file) {
+    public static function setConfig(string $file)
+    {
+        if (!file_exists($file)) {
+            throw new Exception("Configuration file not found: " . $file);
+        }
+
         $conf = parse_ini_file($file);
         if ($conf === false) {
             throw new Exception("Error reading configuration file");
         }
-        $conf = parse_ini_file($file);
+
         $dsn = "{$conf['driver']}:host={$conf['host']};dbname={$conf['database']}";
-        self::$config = ['dsn'=> $dsn, 'user'=> $conf['username'], 'pass'=> $conf['password']];
+        self::$config = ['dsn' => $dsn, 'user' => $conf['username'], 'pass' => $conf['password']];
     }
 
-    public function getPDO(): PDO {
+    public function getPDO(): PDO
+    {
         return $this->pdo;
     }
 
-    public function SaveFavourite(int $id_user,int $_id_episode) {
-        $stmt = $this->pdo->prepare("SELECT id_liste FROM Liste WHERE id_user = :id_user AND type_liste='preference'");
+    public function SaveFavourite(int $id_user, int $id_episode): void
+    {
+        // Récupérer l'id de la liste de favoris de l'utilisateur
+        $stmt = $this->pdo->prepare("SELECT id_liste FROM Liste WHERE id_user = :id_user AND type_list='preference'");
+        $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$result) {
+            throw new \Exception("Liste de favoris introuvable");
+        }
+
+        $id_liste = $result['id_liste'];
+
+        // Vérifier si l'épisode est déjà présent
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM list2episode WHERE id_liste = :id_liste AND id_ep = :id_ep");
+        $stmt->bindParam(':id_liste', $id_liste, PDO::PARAM_INT);
+        $stmt->bindParam(':id_ep', $id_episode, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->fetchColumn() > 0) {
+            throw new \Exception("Cet épisode est déjà dans vos favoris");
+        }
+
+        // Ajouter l'épisode à la liste
+        $stmt = $this->pdo->prepare("INSERT INTO list2episode (id_liste, id_ep) VALUES(:id_liste, :id_ep)");
+        $stmt->bindParam(':id_liste', $id_liste, PDO::PARAM_INT);
+        $stmt->bindParam(':id_ep', $id_episode, PDO::PARAM_INT);
+        $stmt->execute();
     }
+
+
 
     public function getAllSeries(?string $search = null, string $sort = 'titre_serie', ?string $genre = null, ?string $public = null): array
     {
@@ -111,8 +147,6 @@ class NetVODRepo
         return $series;
     }
 
-
-
     public  function getSerieById(int $idSerie): ?Serie
     {
         $stmt = $this->pdo->prepare("SELECT * FROM serie WHERE id_serie = ?");
@@ -145,6 +179,7 @@ class NetVODRepo
 
     public function getEpisodeBySerieID(int $idSerie): array
     {
+        $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_serie = ? ORDER BY num_episode ASC");
 
 
         $stmt = $this->pdo->prepare("SELECT * FROM episode WHERE id_serie = ? ORDER BY numero ASC");
@@ -154,6 +189,7 @@ class NetVODRepo
         $episodes = [];
         foreach ($episodesData as $ep) {
             $episodes[] = new Episode(
+                $ep['id_ep'],
                 $ep['numero'],
                 $ep['titre_ep'],
                 $ep['resume_ep'],
@@ -175,6 +211,7 @@ class NetVODRepo
         if (!$ep) return null;
 
         return new Episode(
+            $ep['id_ep'],
             $ep['numero'],
             $ep['titre_ep'],
             $ep['resume_ep'],
@@ -183,6 +220,67 @@ class NetVODRepo
             $ep['file']
         );
     }
+
+    public function getListePrefByUser(int $idUser): ?Liste
+    {
+        // Récupérer la liste de type "préférence" pour un utilisateur donné
+        $stmt = $this->pdo->prepare(
+            "SELECT * FROM liste WHERE id_user = ? AND type_list = 'preference'"
+        );
+        $stmt->execute([$idUser]);
+        $data = $stmt->fetch();
+
+        if (!$data) {
+            return null;
+        }
+
+        return new Liste($data['id_liste'], $data['id_user'], $data['type_list']);
+    }
+
+    public function getSeriesByListe(int $idListe): array
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT s.* FROM serie s 
+         INNER JOIN list2serie sl ON s.id_serie = sl.id_serie 
+         WHERE sl.id_liste = ?"
+        );
+        $stmt->execute([$idListe]);
+
+        $series = [];
+        while ($data = $stmt->fetch()) {
+            $serie = new Serie(
+                $data['id_serie'],
+                $data['titre_serie'],
+                $data['descriptif'],
+                $data['annee'],
+                $data['genre'],
+                $data['public_vise'],
+                $data['img']
+            );
+            $series[] = $serie;
+        }
+
+        return $series;
+    }
+
+    public function getListeById(int $idListe): ?Liste
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM liste WHERE id_liste = ?");
+        $stmt->execute([$idListe]);
+
+        $data = $stmt->fetch();
+
+        if ($data) {
+            return new Liste(
+                $data['id_liste'],
+                $data['id_user'],
+                $data['type_list']
+            );
+        }
+
+        return null;
+    }
+
 
     public function getUserIdByEmail(string $email) : int {
         $stmt = $this->pdo->prepare("SELECT id_user FROM users WHERE email = ?");

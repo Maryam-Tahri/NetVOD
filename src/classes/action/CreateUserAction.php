@@ -66,7 +66,7 @@ class CreateUserAction extends Action
                 $createInfoUser = $pdo->prepare("INSERT INTO users_infos (id_user, nom, prenom, username, genre, public_vise) VALUES (?, '', '', ?, '', '')");
                 $createInfoUser->execute([$id, $username]);
             } catch (Exception $e) {
-                return $e->getMessage() . "<br><p class='fail'>❌ <b>Impossible</b> de créer votre <b>compte utilisateur</b></p><br>
+                return $e->getMessage() . "<br><p class='fail'> <b>Impossible</b> de créer votre <b>compte utilisateur</b></p><br>
                                            <a href='?action=default' class='btn btn-home'>Retour a l'accueil</a>";
             }
 
@@ -76,7 +76,7 @@ class CreateUserAction extends Action
                 'username' => $_POST['username'] ?? '',
                 'email' => $_POST['email'] ?? ''
             ];
-            $toShow = "<p>❌ " . htmlspecialchars($e->getMessage()) . " ❌</p>";
+            $toShow = "<p class='fail'> " . htmlspecialchars($e->getMessage()) . " ❌</p>";
             if (strpos($e->getMessage(), "email"))
                 $toShow .= "<a href='?action=signin' class='btn btn-signin'>Se connecter</a><br>";
             $toShow .= "<a href='?action=add-user' class='btn btn-retry'>Réessayer</a>";

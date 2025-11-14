@@ -2,10 +2,34 @@
 
 namespace iutnc\netVOD\action;
 
+use iutnc\netVOD\render\ListRender;
+use iutnc\netVOD\repository\NetVODRepo;
+
 class DefaultAction extends Action
 {
-    public  function execute(): String {
-        return "<h2> Bienvenue sur la page </h2>";
-    }
+    public function execute(): String
+    {
+        $html = "<h2>Bienvenue sur netVOD</h2>";
 
+        // Vérifier que l'utilisateur est connecté
+        if (!isset($_SESSION['user']['id'])) {
+            return $html;
+        }
+
+        $repo = NetVODRepo::getInstance();
+
+        // Récupérer la liste de préférences de l'utilisateur
+        $liste = $repo->getListePrefByUser($_SESSION['user']['id']);
+
+        if ($liste === null) {
+            return $html . "<p>Vous n'avez pas encore de liste de préférences.</p>";
+        }
+
+        $renderer = new ListRender();
+        $html = '<div class="liste-detail-container">';
+        $html .= $renderer->renderListe($liste);
+        $html .= '</div>';
+
+        return $html;
+    }
 }
