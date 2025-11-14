@@ -372,4 +372,12 @@ class NetVODRepo
         if (!$row) return null;
         return $row;
     }
+
+    public function getNumEpById(int $id_ep) : int {
+        $stmt = $this->pdo->prepare("SELECT numero FROM episode WHERE id_ep = ?");
+        $stmt->execute([$id_ep]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row) return -1;
+        return $row['numero'];
+    }
 }
