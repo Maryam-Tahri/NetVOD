@@ -62,7 +62,6 @@ HTML;
                 <p>{$episode->resume}</p>
                 
                 <a href="?action=noter&id={$episode->id}" class='btn'>Noter l'épisode</a>
-                <a href="?action=add-favourite&id={$episode->id}" class='btn'>ajouter au favoris</a>
                 </div>
                 HTML;
             } else {
