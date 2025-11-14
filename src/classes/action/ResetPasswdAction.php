@@ -15,7 +15,7 @@ class ResetPasswdAction extends Action
     {
         if ($this->http_method === 'GET') {
             $token = $_GET['token'] ?? '';
-            if (!$token) return "<p class='fail'>❌ Lien invalide : aucun token fourni.</p><br><a href='?action=default' class='btn btn-home'>Retour à l'accueil</a>";
+            if (!$token) return "<p class='fail'>Lien invalide : aucun token fourni.</p><br><a href='?action=default' class='btn btn-home'>Retour à l'accueil</a>";
 
             return <<<HTML
                 <h2>Réinitialiser son mot de passe</h2>
@@ -32,7 +32,7 @@ class ResetPasswdAction extends Action
             $token = $_GET['token'] ?? '';
             $email = $_SESSION['form_data_tmp']['email'] ?? '';
 
-            if (!$token) return "<p class='fail'>❌ Lien invalide : aucun token fourni.</p><br><a href='?action=default' class='btn btn-home'>Retour à l'accueil</a>";
+            if (!$token) return "<p class='fail'>Lien invalide : aucun token fourni.</p><br><a href='?action=default' class='btn btn-home'>Retour à l'accueil</a>";
 
             $pdo = NetVODRepo::getInstance()->getPDO();
 
@@ -41,7 +41,7 @@ class ResetPasswdAction extends Action
             $row = $stmt->fetch();
 
             if (!$row) {
-                return "<p class='fail'>❌ Lien invalide : le token fourni n'exite plus.</p><a href='?action=default' class='btn btn-home'>Retour à l'accueil</a>";
+                return "<p class='fail'>Lien invalide : le token fourni n'exite plus.</p><a href='?action=default' class='btn btn-home'>Retour à l'accueil</a>";
             }
 
             $id_user = $row['id_user'];
@@ -76,14 +76,14 @@ class ResetPasswdAction extends Action
                     $majPasswd->execute([$hash, $id_user]);
                 }
             } catch (AuthException $e) {
-                $toShow = "<p>❌ " . htmlspecialchars($e->getMessage()) . " ❌</p>";
+                $toShow = "<p>" . htmlspecialchars($e->getMessage()) . "</p>";
                 if (strpos($e->getMessage(), "email"))
                     $toShow .= "<a href='?action=signin' class='btn btn-signin'>Se connecter</a><br>";
                 $toShow .= "<a href='?action=add-user' class='btn btn-retry'>Réessayer</a>";
                 return $toShow;
             }
 
-            return "<p>✅ Mot de Passe modifié pour (ID $id_user) 🎉. Vous pouvez maintenant vous connecté 👍.</p>
+            return "<p class='success'>Mot de Passe modifié. Vous pouvez maintenant vous connecter.</p>
                     <a href='?action=signin' class='btn btn-confirm'>Se connecter</a>
                     <a href='?action=signin' class='btn btn-home'>Retour à l'accueil</a>";
         }
