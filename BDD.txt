@@ -168,3 +168,4 @@ UPDATE Serie SET img = 'img/Nuit.png' WHERE id_serie = 6;
 
 
 
+
