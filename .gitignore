@@ -1,6 +1,6 @@
 out
 *.iml
 *.class
-.idea
+*.idea
 .DS_Store
 /audio

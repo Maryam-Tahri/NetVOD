@@ -6,6 +6,7 @@ use Exception;
 
 class Episode
 {
+    private int $id;
     private int $numEpisode;
     private String $titre;
     private String $resume;
@@ -13,7 +14,8 @@ class Episode
     private ?String $cheminImg;
     private String $chemin;
 
-    public function __construct(int $numEpisode, string $titre, string $resume, int $duree, ?String $cheminImg, $chemin){
+    public function __construct(int $id, int $numEpisode, string $titre, string $resume, int $duree, ?String $cheminImg, $chemin){
+        $this->id = $id;
         $this->numEpisode = $numEpisode;
         $this->titre = $titre;
         $this->resume = $resume;
