@@ -36,13 +36,13 @@ HTML;
                 if(isset($serie->listeEpisodes[$ep-1])){
                     $eppre=$serie->listeEpisodes[$ep-1]->id;
                     $preced = <<<HTML
-                    <a href="?action=display-episode&watch={$eppre}"><button>episode précedent</button></a>
+                    <a href="?action=display-episode&watch={$eppre}"><button>Episode Précedent</button></a>
                     HTML;
                 }
                 if(isset($serie->listeEpisodes[$ep+1])){
                     $eppro=$serie->listeEpisodes[$ep+1]->id;
                     $suivant = <<<HTML
-                    <a href="?action=display-episode&watch={$eppro}"><button >episode Suivant</button></a>
+                    <a href="?action=display-episode&watch={$eppro}"><button >Episode Suivant</button></a>
                     HTML;
                 }
                 $_SESSION['last_ep']=serialize($episode);
