@@ -3,6 +3,7 @@
 namespace iutnc\netVOD\repository;
 use Exception;
 use iutnc\netVOD\base\Episode;
+use iutnc\netVOD\base\Liste;
 use iutnc\netVOD\base\Serie;
 use PDO;
 
