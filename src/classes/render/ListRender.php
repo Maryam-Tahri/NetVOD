@@ -42,7 +42,7 @@ class ListRender
         if (empty($series)) {
             return <<<HTML
         <div class='liste-detail'>
-            <h2>Liste : $typeListe</h2>
+            <h3>Liste : $typeListe</h3>
             <p>Cette liste ne contient aucune série pour le moment.</p>
         </div>
         HTML;
@@ -57,7 +57,7 @@ class ListRender
 
         $html = <<<HTML
     <div class='liste-detail'>
-        <h2>Ma liste : $typeListe</h2>
+        <h3>Ma liste : $typeListe</h3>
         <div class='series-grid'>
             $seriesHtml
         </div>

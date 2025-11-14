@@ -22,7 +22,7 @@ class AfficheListe extends Action
         }
 
         $renderer = new ListRender();
-        $html = '<div class="liste-detail-container">';
+        $html = '<div class="liste-section">';
         $html .= $renderer->renderSeriesListe($liste);
         $html .= '</div>';
 
