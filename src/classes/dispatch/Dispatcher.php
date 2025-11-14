@@ -14,6 +14,7 @@ use iutnc\netVOD\action\DeleteTrackAction;
 use iutnc\netVOD\action\DisplayEpisodeAction;
 use iutnc\netVOD\action\DisplayPlaylistAction;
 use iutnc\netVOD\action\CreateUserAction;
+use iutnc\netVOD\action\EvaluationAction;
 use iutnc\netVOD\action\logoutAction;
 use iutnc\netVOD\action\MySerieAction;
 use iutnc\netVOD\action\ResetPasswdAction;
@@ -63,6 +64,10 @@ class Dispatcher
                 $action = new DisplayEpisodeAction();
                 $this->renderPage($action->execute());
                 break;
+            case "noter":
+                $action = new EvaluationAction();
+                $this->renderPage($action->execute());
+                break;
             case "mySeries":
                 $action = new MySerieAction();
                 $this->renderPage($action->execute());
@@ -94,7 +99,6 @@ class Dispatcher
             $conn = <<<HTML
             <a href='?action=add-user'>Inscription</a>
             <a href='?action=signin'>Se connecter</a>
-            <a href="?action=catalogue">Afficher le catalogue</a>
 HTML;
         }else{
             $conn = <<<HTML

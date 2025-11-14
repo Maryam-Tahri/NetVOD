@@ -61,6 +61,7 @@ HTML;
                 <h2>Episode {$episode->numEpisode} - {$episode->titre} ( {$episode->duree} min) </h2>
                 <p>{$episode->resume}</p>
                 
+                <a href="?action=noter&id={$episode->id_ep}">Noté l'épisode</a>
                 <a href="?action=add-favourite&id={$episode->id_ep}">ajouter au favoris</a>
                 </div>
                 HTML;

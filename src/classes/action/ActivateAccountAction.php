@@ -48,7 +48,7 @@ class ActivateAccountAction extends Action
             $delete = $pdo->prepare("DELETE FROM Tokens WHERE token = ?");
             $delete->execute([$token]);
 
-            return "<p>✅ Inscription réussie (ID $id_user) 🎉. Vous pouvez maintenant vous connecté 👍.</p>
+            return "<p>✅ Inscription réussie 🎉. Vous pouvez maintenant vous connecté 👍.</p>
                     <a href='?action=signin' class='btn btn-confirm'>Se connecter</a>
                     <a href='?action=signin' class='btn btn-home'>Retour à l'accueil</a>";
         }
