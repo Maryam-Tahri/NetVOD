@@ -38,7 +38,7 @@ class SerieRenderer
         foreach ($serie->listeEpisodes as $ep) {
             $episodesHtml .= <<<HTML
             <div class='episode'>
-                <a href='?action=episode&id={$ep->numEpisode}'>
+                <a href='?action=episode&id={$ep->id}'>
                     <img src='{$ep->cheminImg}' alt='Image de l\'épisode'>
                     <p><strong>Épisode {$ep->numEpisode} : {$ep->titre}</strong></p>
                     <p>Durée : {$ep->duree} min</p>
