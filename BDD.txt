@@ -133,6 +133,27 @@ UPDATE serie SET public_vise = 'Ado' WHERE id_serie = 4;
 UPDATE serie SET public_vise = 'Adulte' WHERE id_serie = 5;
 UPDATE serie SET public_vise = 'Ado' WHERE id_serie = 6;
 
+UPDATE Episode SET img = 'img/Lac4.png' WHERE id_ep = 1;
+UPDATE Episode SET img = 'img/Lac4.png' WHERE id_ep = 2;
+UPDATE Episode SET img = 'img/Lac4.png' WHERE id_ep = 3;
+UPDATE Episode SET img = 'img/Lac4.png' WHERE id_ep = 4;
+UPDATE Episode SET img = 'img/Lac5.png' WHERE id_ep = 5;
+UPDATE Episode SET img = 'img/Eau1.png' WHERE id_ep = 6;
+UPDATE Episode SET img = 'img/Eau2.png' WHERE id_ep = 7;
+UPDATE Episode SET img = 'img/Eau3.png' WHERE id_ep = 8;
+UPDATE Episode SET img = 'img/Eau4.png' WHERE id_ep = 9;
+UPDATE Episode SET img = 'img/Eau5.png' WHERE id_ep = 10;
+UPDATE Episode SET img = 'img/Chevaux1.png' WHERE id_ep = 11;
+UPDATE Episode SET img = 'img/Chevaux2.png' WHERE id_ep = 12;
+UPDATE Episode SET img = 'img/Chevaux3.png' WHERE id_ep = 13;
+UPDATE Episode SET img = 'img/Plage1.png' WHERE id_ep = 14;
+UPDATE Episode SET img = 'img/Plage2.png' WHERE id_ep = 15;
+UPDATE Episode SET img = 'img/Plage3.png' WHERE id_ep = 16;
+UPDATE Episode SET img = 'img/Champion1.png' WHERE id_ep = 17;
+UPDATE Episode SET img = 'img/Champion2.png' WHERE id_ep = 18;
+UPDATE Episode SET img = 'img/Champion3.png' WHERE id_ep = 19;
+UPDATE Episode SET img = 'img/Nuit1.png' WHERE id_ep = 20;
+UPDATE Episode SET img = 'img/Nuit2.png' WHERE id_ep = 21;
 
 
 
