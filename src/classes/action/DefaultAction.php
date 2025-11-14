@@ -26,7 +26,7 @@ class DefaultAction extends Action
         }
 
         $renderer = new ListRender();
-        $html = '<div class="liste-detail-container">';
+        $html = '<div class="liste-detail">';
         $html .= $renderer->renderListe($liste);
         $html .= '</div>';
 

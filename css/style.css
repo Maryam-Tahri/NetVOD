@@ -955,22 +955,6 @@ body {
     background-color: var(--bleu-fonce);
 }
 
-/* ============  SUCCÈS & ERREUR ============ */
-
-.success {
-    padding: 10px;
-    margin: 15px 0;
-    background-color: var(--bleu-clair);
-    border-left: 4px solid var(--bleu-fonce);
-}
-
-.error {
-    padding: 10px;
-    margin: 15px 0;
-    background-color: #444;
-    border-left: 4px solid #777;
-}
-
 /* ============  SITUATION AUCUNE SERIE ============ */
 
 .no-content {
