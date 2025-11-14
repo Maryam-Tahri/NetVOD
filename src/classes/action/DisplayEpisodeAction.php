@@ -26,7 +26,7 @@ HTML;
             if (isset($serie->listeEpisodes[$ep])) {
                 $actuel= $_GET['watch'];
                 $preced=<<<HTML
-<a href="?action=display-episode&watch={$actuel}"><button>Finir l'épisode sans passer au prochain(pas de précédent)</button></a>
+<a href="?action=display-episode&watch={$actuel}"><button>Finir l'épisode sans passer au prochain (pas de précédent)</button></a>
 HTML;
                 $suivant=<<<HTML
 <a href="?action=display-episode&watch={$actuel}"><button>Finir l'épisode (Pas d'épisode suivant)</button></a>
@@ -61,8 +61,8 @@ HTML;
                 <h2>Episode {$episode->numEpisode} - {$episode->titre} ( {$episode->duree} min) </h2>
                 <p>{$episode->resume}</p>
                 
-                <a href="?action=noter&id={$episode->id}">Noté l'épisode</a>
-                <a href="?action=add-favourite&id={$episode->id}">ajouter au favoris</a>
+                <a href="?action=noter&id={$episode->id}" class='btn'>Noter l'épisode</a>
+                <a href="?action=add-favourite&id={$episode->id}" class='btn'>ajouter au favoris</a>
                 </div>
                 HTML;
             } else {
