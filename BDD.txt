@@ -133,9 +133,9 @@ UPDATE serie SET public_vise = 'Ado' WHERE id_serie = 4;
 UPDATE serie SET public_vise = 'Adulte' WHERE id_serie = 5;
 UPDATE serie SET public_vise = 'Ado' WHERE id_serie = 6;
 
-UPDATE Episode SET img = 'img/Lac4.png' WHERE id_ep = 1;
-UPDATE Episode SET img = 'img/Lac4.png' WHERE id_ep = 2;
-UPDATE Episode SET img = 'img/Lac4.png' WHERE id_ep = 3;
+UPDATE Episode SET img = 'img/Lac1.png' WHERE id_ep = 1;
+UPDATE Episode SET img = 'img/Lac2.png' WHERE id_ep = 2;
+UPDATE Episode SET img = 'img/Lac3.png' WHERE id_ep = 3;
 UPDATE Episode SET img = 'img/Lac4.png' WHERE id_ep = 4;
 UPDATE Episode SET img = 'img/Lac5.png' WHERE id_ep = 5;
 UPDATE Episode SET img = 'img/Eau1.png' WHERE id_ep = 6;
