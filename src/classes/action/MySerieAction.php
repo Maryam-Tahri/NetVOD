@@ -16,25 +16,9 @@ HTML;
         }
 
         $repo = NetVODRepo::getInstance();
-        $favoris = $repo->getFavorites($_SESSION["user"]['id']);
         $renderer = new SerieRenderer();
 
-        // --- FAVORIS ---
-        $html = <<<HTML
-<div class="liste-section">
-    <h3>Mes Favoris</h3>
-    <div class="series-grid">
-HTML;
-
-        foreach($favoris as $fav){
-            $html .= $renderer->render($fav);
-        }
-
-        $html .= <<<HTML
-    </div>
-</div>
-HTML;
-
+        $html ="";
         // --- EN COURS ---
         $series = $repo->getDejaVu($_SESSION["user"]['id']);
 

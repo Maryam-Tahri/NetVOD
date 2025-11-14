@@ -73,11 +73,6 @@ class AuthnProvider
                     $user = $bdd->prepare("INSERT INTO Users (email, password, role) VALUES (?, ?, 1)");
                     // TODO : Ajouter le nom d'utilisateur a la base de donnée
                     $user->execute([$email, $hashed]);
-                    // Création automatique d'une liste de favoris vide
-                    $id_user = (int)$bdd->lastInsertId();
-                    $liste = $bdd->prepare("INSERT INTO Liste (id_user, type_list) VALUES (?, 'preference')");
-                    $liste->bindParam(1, $id_user);
-                    $liste->execute();
                     return (int)$bdd->lastInsertId();
                 } else {
                     throw new AuthException("Auth error : Une erreur est survenu");
