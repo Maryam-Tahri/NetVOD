@@ -20,6 +20,8 @@ use iutnc\netVOD\action\MySerieAction;
 use iutnc\netVOD\action\ResetPasswdAction;
 use iutnc\netVOD\action\ResetPasswdTokenAction;
 use iutnc\netVOD\action\signinAction;
+use iutnc\netVOD\action\AjouterFavoris;
+use iutnc\netVOD\action\AfficheListe;
 use iutnc\netVOD\action\UserProfileSettingsAction;
 
 class Dispatcher
@@ -52,12 +54,20 @@ class Dispatcher
                 $action = new LogoutAction();
                 $this->renderPage($action->execute());
                 break;
+            case 'ajouter-favoris':
+                $action = new AjouterFavoris();
+                $this->renderPage($action->execute());
+                break;
             case "serie":
                 $action = new AfficheSerie();
                 $this->renderPage($action->execute());
                 break;
             case "episode":
                 $action = new AfficheEpisode();
+                $this->renderPage($action->execute());
+                break;
+            case "liste":
+                $action = new AfficheListe();
                 $this->renderPage($action->execute());
                 break;
             case "display-episode":
@@ -112,13 +122,13 @@ HTML;
         <html lang="fr">
         <head>
             <meta charset="UTF-8">
-            <title>Deefy</title>
-            <link rel='stylesheet' href='../css/style.css'>
+            <title>NetVOD</title>
+            <link rel='stylesheet' href='/NetVOD/css/style.css?=v3'>
         </head>
         <body>
             <header>
-                <h1>Deefy</h1>
-                <p>Votre espace personnel pour créer et écouter vos playlists</p>
+                <h1>NetVOD</h1>
+                <p>Votre espace personnel pour regarder les meilleures séries</p>
             </header>
 
             <nav>

@@ -39,7 +39,7 @@ HTML;
                 $_SESSION['try'] = 0;
             }
             $email = filter_var($_POST['email'],FILTER_VALIDATE_EMAIL);
-            $pswd = filter_var($_POST['mdp'],FILTER_SANITIZE_STRING);
+            $pswd = htmlspecialchars($_POST['mdp'], ENT_QUOTES, 'UTF-8');
             try{
                 AuthnProvider::signin($email, $pswd);
             }catch (AuthException $e){

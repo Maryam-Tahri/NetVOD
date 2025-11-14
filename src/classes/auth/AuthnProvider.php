@@ -4,15 +4,32 @@ namespace iutnc\netVOD\auth;
 
 use iutnc\netVOD\repository\NetVODRepo;
 use iutnc\netVOD\exception\AuthException;
-class AuthnProvider {
 
-    public static function signin(string $email,
-                                  string $passwd2check): bool {
+class AuthnProvider
+{
+    public static function signin(string $email, string $passwd2check): bool
+    {
         $bdd = NetVODRepo::getInstance()->getPDO();
         $user = $bdd->prepare("SELECT id_user, password, role, is_active FROM Users WHERE email = ?");
         $user->bindParam(1, $email);
         $user->execute();
         $row = $user->fetch();
+
+        if (isset($row['password'])) {
+            if (!password_verify($passwd2check, $row['password'])) {
+                throw new AuthException("Auth error : invalid credentials");
+            }
+        } else {
+            throw new AuthException("Auth error : invalid credentials");
+        }
+
+        $_SESSION['user'] = [
+            'id' => $row['id_user'],
+            'email' => $email,
+            'role' => $row['role']
+        ];
+
+        return true;
 
         if (!$row) {
             throw new AuthException("Auth error : Aucun email correspondant");
@@ -37,12 +54,16 @@ class AuthnProvider {
         }
     }
 
-    public static function register(string $email,string $passwd): int {
+    public static function register(string $email, string $passwd): int
+    {
         $bdd = NetVODRepo::getInstance()->getPDO();
+
+        // Vérifie si l'email existe déjà
         $user = $bdd->prepare("SELECT email FROM Users WHERE email = ?");
         $user->bindParam(1, $email);
         $user->execute();
         $row = $user->fetch();
+
         if ($row && isset($row['email'])) {
             throw new AuthException("Auth error : email already exists");
         } else {
@@ -52,6 +73,11 @@ class AuthnProvider {
                     $user = $bdd->prepare("INSERT INTO Users (email, password, role) VALUES (?, ?, 1)");
                     // TODO : Ajouter le nom d'utilisateur a la base de donnée
                     $user->execute([$email, $hashed]);
+                    // Création automatique d'une liste de favoris vide
+                    $id_user = (int)$bdd->lastInsertId();
+                    $liste = $bdd->prepare("INSERT INTO Liste (id_user, type_list) VALUES (?, 'preference')");
+                    $liste->bindParam(1, $id_user);
+                    $liste->execute();
                     return (int)$bdd->lastInsertId();
                 } else {
                     throw new AuthException("Auth error : Une erreur est survenu");
@@ -94,11 +120,12 @@ class AuthnProvider {
         }
     }
 
-    public static function getSignedInUser(){
+    public static function getSignedInUser()
+    {
         if (isset($_SESSION['user'])) {
             return $_SESSION['user']['id'];
-        }else{
-            throw new AuthException("Vous n'êtes pas connecter !");
+        } else {
+            throw new AuthException("Vous n'êtes pas connecté !");
         }
     }
 }
