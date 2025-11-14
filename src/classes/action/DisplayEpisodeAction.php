@@ -52,7 +52,7 @@ HTML;
                     controls
                     preload="metadata"
                     poster="{$episode->cheminImg}"
-                    src="{$episode->chemin}">
+                    src="video/{$episode->chemin}">
                   </video>
                 </div>
                 {$preced}
