@@ -15,9 +15,9 @@ class EvaluationAction extends Action
 HTML;
         }
         $id_ep = $_GET['id'];
-        $id_user = $_GET['user']['id'];
+        $id_user = $_SESSION['user']['id'];
         $stmt = NetVODRepo::getInstance()->getPDO();
-        $stmt = $stmt->prepare("SELECT count(*) FROM evaluation WHERE id_ep = ? AND id_user = ?");
+        $stmt = $stmt->prepare("SELECT count(*) FROM commentaire WHERE id_ep = ? AND id_user = ?");
         $stmt->bindParam(1,$id_ep);
         $stmt->bindParam(2,$id_user);
         $stmt->execute();
@@ -29,7 +29,7 @@ HTML;
         }
         if($_SERVER['REQUEST_METHOD'] == 'GET'){
             return <<<HTML
-<form method="POST" action="?action=evaluation">
+<form method="POST" action="?action=noter&id={$id_ep}">
 <label for='comm'>Commentaire :</label><br>
 <input type='text' name='comm' id='comm' required><br><br>
 
@@ -42,7 +42,7 @@ HTML;
             $note =filter_var($_POST['comm'],FILTER_SANITIZE_NUMBER_INT);
             $comm =filter_var($_POST['comm'],FILTER_SANITIZE_STRING);
             $stmt = NetVODRepo::getInstance()->getPDO();
-            $stmt = $stmt->prepare("INSERT INTO evaluation (id_ep, id_user, commentaire, note, date) VALUES (?, ?, ?, ?, ?)");
+            $stmt = $stmt->prepare("INSERT INTO commentaire (id_ep, id_user, commentaire, note, date_commentaire) VALUES (?, ?, ?, ?, ?)");
             $stmt->bindParam(1,$id_ep);
             $stmt->bindParam(2,$id_user);
             $stmt->bindParam(3,$comm);
